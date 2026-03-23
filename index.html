@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EnquiryDesk PMO</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--s1:#111318;--s2:#181c24;--b:#1f2533;--b2:#2a3347;--acc:#3b82f6;--grn:#10b981;--yel:#f59e0b;--red:#ef4444;--org:#f97316;--pur:#8b5cf6;--t1:#e8eaf0;--t2:#8892a4;--t3:#4a5568;--fh:'Syne',sans-serif;--fb:'DM Sans',sans-serif;--r:10px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--t1);font-family:var(--fb);font-size:14px;min-height:100vh;}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px;}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 26px;border-bottom:1px solid var(--b);background:var(--s1);position:sticky;top:0;z-index:200;}
+.logo{font-family:var(--fh);font-size:18px;font-weight:800;letter-spacing:-.5px;}.logo em{color:var(--acc);font-style:normal;}
+.logo sub{font-size:10px;color:var(--t3);font-weight:400;margin-left:4px;vertical-align:middle;}
+.hdr-r{display:flex;align-items:center;gap:10px;}
+.live{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--grn);}
+.ld{width:7px;height:7px;border-radius:50%;background:var(--grn);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-family:var(--fb);font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s;}
+.bp{background:var(--acc);color:#fff;}.bp:hover{background:#2563eb;}
+.bg{background:transparent;color:var(--t2);border:1px solid var(--b);}.bg:hover{border-color:var(--acc);color:var(--acc);}
+.bs{background:rgba(16,185,129,.12);color:var(--grn);border:1px solid rgba(16,185,129,.25);}
+.bd{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25);}
+.sm{padding:4px 9px;font-size:12px;}.xs{padding:3px 7px;font-size:11px;}
+.layout{display:flex;height:calc(100vh - 55px);}
+.sidebar{width:206px;flex-shrink:0;border-right:1px solid var(--b);background:var(--s1);padding:12px 0;overflow-y:auto;}
+.ns{padding:11px 15px 4px;font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--t3);text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:8px;padding:8px 15px;cursor:pointer;color:var(--t2);font-size:13px;transition:all .12s;border-left:3px solid transparent;}
+.ni:hover{color:var(--t1);background:var(--s2);}.ni.active{color:var(--acc);background:rgba(59,130,246,.08);border-left-color:var(--acc);font-weight:500;}
+.nic{font-size:14px;width:17px;text-align:center;}
+.nib{margin-left:auto;background:var(--acc);color:#fff;font-size:10px;padding:1px 5px;border-radius:10px;font-weight:600;}
+.nib.al{background:var(--red);}
+.main{flex:1;overflow-y:auto;}
+.view{display:none;padding:21px 25px;animation:fi .22s ease;}.view.active{display:block;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.vh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:19px;flex-wrap:wrap;gap:8px;}
+.vt{font-family:var(--fh);font-size:19px;font-weight:800;}.vsb{font-size:12px;color:var(--t2);margin-top:2px;}
+.kgd{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px;}
+.kpi{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:12px 14px;position:relative;overflow:hidden;transition:border-color .15s;}
+.kpi:hover{border-color:var(--acc);}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.kb::before{background:var(--acc);}.kg::before{background:var(--grn);}.ky::before{background:var(--yel);}
+.kr::before{background:var(--red);}.kp::before{background:var(--pur);}.ko::before{background:var(--org);}
+.kl{font-size:10px;color:var(--t2);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
+.kv{font-family:var(--fh);font-size:20px;font-weight:800;line-height:1;margin-bottom:2px;}
+.ks{font-size:11px;color:var(--t3);}
+.kpi-ind{position:absolute;top:10px;right:10px;font-size:16px;line-height:1;}
+.kpi-ok{color:var(--grn);}.kpi-warn{color:var(--yel);}.kpi-alert{color:var(--red);}
+.tw{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;}
+.ttb{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--b);flex-wrap:wrap;}
+.ovf{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:800px;}
+thead th{background:var(--s2);padding:8px 10px;text-align:left;font-size:10px;font-weight:700;letter-spacing:.7px;color:var(--t3);text-transform:uppercase;border-bottom:1px solid var(--b);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--b);transition:background .1s;cursor:pointer;}
+tbody tr:hover{background:var(--s2);}
+tbody tr.rt{background:rgba(239,68,68,.05);border-left:3px solid var(--red);}
+tbody tr.rt:hover{background:rgba(239,68,68,.1);}
+tbody td{padding:8px 10px;font-size:13px;color:var(--t1);vertical-align:middle;white-space:nowrap;}
+.cm{font-weight:500;}.cs{font-size:11px;color:var(--t2);margin-top:1px;}
+.ac{display:flex;gap:3px;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
+.bnw{background:rgba(59,130,246,.15);color:#60a5fa;}.brc{background:rgba(139,92,246,.15);color:#a78bfa;}
+.brf{background:rgba(245,158,11,.15);color:#fbbf24;}.bqs{background:rgba(6,182,212,.15);color:#22d3ee;}
+.bqa{background:rgba(16,185,129,.15);color:#34d399;}.bqr{background:rgba(239,68,68,.15);color:#f87171;}
+.bng{background:rgba(249,115,22,.15);color:#fb923c;}
+.bih{background:rgba(16,185,129,.1);color:#6ee7b7;border:1px solid rgba(16,185,129,.2);}
+.bos{background:rgba(249,115,22,.1);color:#fdba74;border:1px solid rgba(249,115,22,.2);}
+.bpd{background:rgba(245,158,11,.12);color:#fcd34d;}.bst{background:rgba(6,182,212,.12);color:#67e8f9;}
+.bpaid{background:rgba(16,185,129,.12);color:#6ee7b7;}.bovd{background:rgba(239,68,68,.12);color:#fca5a5;}
+.bprt{background:rgba(139,92,246,.12);color:#c4b5fd;}
+.ttag{display:inline-flex;background:rgba(239,68,68,.2);color:var(--red);font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:4px;}
+.pop{display:inline-flex;align-items:center;gap:3px;background:rgba(249,115,22,.1);color:var(--org);border:1px solid rgba(249,115,22,.25);border-radius:6px;font-size:11px;font-weight:600;padding:2px 8px;}
+.pop.ok{background:rgba(16,185,129,.1);color:var(--grn);border-color:rgba(16,185,129,.25);}
+.sw{position:relative;}.sw input{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 9px 6px 29px;color:var(--t1);font-family:var(--fb);font-size:13px;outline:none;width:200px;transition:border-color .13s;}.sw input:focus{border-color:var(--acc);}
+.swi{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:12px;}
+.fsel{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:6px 9px;color:var(--t2);font-family:var(--fb);font-size:13px;outline:none;cursor:pointer;}.fsel:focus{border-color:var(--acc);}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;display:flex;align-items:center;justify-content:center;padding:13px;opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--s1);border:1px solid var(--b);border-radius:13px;width:100%;max-width:800px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.6);transform:translateY(13px);transition:transform .2s;}
+.overlay.open .modal{transform:translateY(0);}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:15px 19px;border-bottom:1px solid var(--b);}
+.mt{font-family:var(--fh);font-size:15px;font-weight:700;}
+.mc{background:var(--s2);border:none;color:var(--t2);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}.mc:hover{background:var(--b);color:var(--t1);}
+.mb{padding:17px 19px;}.mf{display:flex;align-items:center;justify-content:flex-end;gap:7px;padding:11px 19px;border-top:1px solid var(--b);}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fgd{display:grid;grid-template-columns:1fr 1fr;gap:11px;}.fgd .fl{grid-column:1/-1;}
+.fsc{margin-top:15px;padding-top:15px;border-top:1px solid var(--b);}
+.fst{font-family:var(--fh);font-size:11px;font-weight:700;color:var(--t2);letter-spacing:.5px;text-transform:uppercase;margin-bottom:9px;}
+label{font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.3px;text-transform:uppercase;}
+.fi{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 10px;color:var(--t1);font-family:var(--fb);font-size:13px;outline:none;transition:border-color .13s;width:100%;}
+.fi:focus{border-color:var(--acc);}.fi:disabled{opacity:.35;cursor:not-allowed;}
+textarea.fi{resize:vertical;min-height:62px;}
+.cbox{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:8px;padding:10px 12px;margin-top:9px;}
+.cres{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--acc);margin-top:3px;}
+.cbox-os{background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.18);border-radius:8px;padding:10px 12px;margin-top:9px;}
+.cres-os{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--org);margin-top:3px;}
+.cgd{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px;}
+.cc{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:15px;}
+.cct{font-family:var(--fh);font-size:13px;font-weight:700;margin-bottom:11px;}
+.br{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.bl{font-size:12px;color:var(--t2);width:130px;flex-shrink:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bt{flex:1;height:7px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.bf{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+.bn{font-size:11px;color:var(--t3);width:18px;}
+.sgd{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.sc{background:var(--s1);border:1px solid var(--b);border-radius:var(--r);padding:15px;}
+.sc.fl{grid-column:1/-1;}.sct{font-family:var(--fh);font-size:13px;font-weight:700;margin-bottom:9px;}
+.tag{display:inline-flex;align-items:center;gap:3px;background:var(--s2);border:1px solid var(--b);border-radius:6px;padding:3px 7px;font-size:12px;margin:2px;}
+.tdl{cursor:pointer;color:var(--t3);}.tdl:hover{color:var(--red);}
+.tabs{display:flex;gap:2px;background:var(--s2);border-radius:9px;padding:3px;width:fit-content;margin-bottom:14px;}
+.tab{padding:5px 13px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t2);transition:all .13s;}
+.tab.active{background:var(--s1);color:var(--t1);box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.toast{position:fixed;bottom:17px;right:17px;background:var(--s1);border:1px solid var(--b);border-radius:9px;padding:9px 14px;font-size:13px;box-shadow:0 4px 20px rgba(0,0,0,.4);z-index:9999;transform:translateY(70px);opacity:0;transition:all .25s;max-width:310px;}
+.toast.show{transform:translateY(0);opacity:1;}.toast.ok{border-left:3px solid var(--grn);}.toast.err{border-left:3px solid var(--red);}
+.zhconn{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--grn);background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);padding:4px 10px;border-radius:20px;}
+.zhdisc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);background:var(--s2);border:1px solid var(--b);padding:4px 10px;border-radius:20px;cursor:pointer;transition:all .13s;}.zhdisc:hover{border-color:var(--acc);color:var(--acc);}
+.zhsync{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:rgba(16,185,129,.1);color:var(--grn);transition:all .13s;}.zhsync:hover{background:rgba(16,185,129,.2);}
+.ibox{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.17);border-radius:9px;padding:12px 14px;font-size:13px;color:var(--t2);line-height:1.8;margin-bottom:12px;}
+.ibox strong{color:var(--t1);}.ibox code{background:var(--s2);color:#06b6d4;padding:2px 5px;border-radius:4px;font-size:12px;cursor:pointer;}
+.tok-ok{background:rgba(16,185,129,.08);color:var(--grn);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:7px 11px;font-size:12px;margin-top:7px;}
+.tok-err{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:7px 11px;font-size:12px;margin-top:7px;}
+.zi-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px;}
+.zi-r{display:flex;flex-direction:column;gap:2px;}.zi-l{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);}
+.zi-v{font-size:13px;color:var(--t1);font-weight:500;}.zi-v.big{font-family:var(--fh);font-size:18px;font-weight:800;color:var(--grn);}
+.zhic{background:var(--s2);border:1px solid var(--grn);border-radius:10px;padding:14px;margin-top:11px;display:none;}.zhic.show{display:block;}
+.parse-ta{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:9px;color:var(--t1);font-family:monospace;font-size:12px;min-height:115px;resize:vertical;outline:none;}.parse-ta:focus{border-color:var(--acc);}
+.pcard{background:var(--s2);border:1px solid var(--grn);border-radius:9px;padding:12px;margin-top:11px;display:none;}.pcard.show{display:block;}
+.pr{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--b);font-size:13px;}.pr:last-child{border:none;}
+@media(max-width:860px){.kgd{grid-template-columns:repeat(3,1fr);}.cgd{grid-template-columns:1fr;}.sidebar{width:46px;}.ni span,.ns,.nib{display:none;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="logo">Enquiry<em>Desk</em><sub>PMO</sub></div>
+  <div class="hdr-r">
+    <div class="live"><span class="ld"></span>Live</div>
+    <div id="zh-badge" class="zhdisc" onclick="navTo('zoho')">&#x26A1; Connect Zoho</div>
+    <button class="btn bg sm" onclick="openParse()">&#x1F4E7; Parse Email</button>
+    <button class="btn bp sm" onclick="openAdd()">+ New Enquiry</button>
+  </div>
+</header>
+<div class="layout">
+<nav class="sidebar">
+  <div class="ns">Main</div>
+  <div class="ni active" onclick="navTo('dashboard')"><span class="nic">&#x1F4CA;</span><span>Dashboard</span></div>
+  <div class="ni" onclick="navTo('all')"><span class="nic">&#x1F4CB;</span><span>All Enquiries</span><span class="nib" id="nb-all">0</span></div>
+  <div class="ns">Pipeline</div>
+  <div class="ni" onclick="navTo('leads')"><span class="nic">&#x1F195;</span><span>New Leads</span><span class="nib" id="nb-new">0</span></div>
+  <div class="ni" onclick="navTo('quotes')"><span class="nic">&#x1F4AC;</span><span>Quotes</span></div>
+  <div class="ni" onclick="navTo('delivery')"><span class="nic">&#x1F680;</span><span>Delivery</span><span class="nib al" id="nb-due" style="display:none">!</span></div>
+  <div class="ns">Finance</div>
+  <div class="ni" onclick="navTo('outsource')"><span class="nic">&#x1F91D;</span><span>Outsource</span></div>
+  <div class="ni" onclick="navTo('invoices')"><span class="nic">&#x1F9FE;</span><span>Invoices</span></div>
+  <div class="ns">Config</div>
+  <div class="ni" onclick="navTo('zoho')"><span class="nic">&#x1F517;</span><span>Zoho Books</span></div>
+  <div class="ni" onclick="navTo('settings')"><span class="nic">&#x2699;&#xFE0F;</span><span>Settings</span></div>
+</nav>
+<main class="main">
+
+<div class="view active" id="v-dashboard">
+  <div class="vh">
+    <div><div class="vt">Overview</div><div class="vsb" id="dash-date"></div></div>
+    <select class="fsel" id="dash-rng" onchange="renderDash()"><option value="all">All Time</option><option value="month" selected>This Month</option><option value="week">This Week</option></select>
+  </div>
+  <div class="kgd" id="kstrip"></div>
+  <div id="ret-strip" style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px;"></div>
+
+  <div id="today-alert" style="display:none;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);border-radius:10px;padding:12px 16px;margin-bottom:16px;">
+    <div style="font-weight:600;color:var(--red);margin-bottom:6px;">Deliveries Due Today</div>
+    <div id="today-list" style="font-size:13px;color:var(--t2);"></div>
+  </div>
+  <div class="cgd" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="cc"><div class="cct">Pipeline Status</div><div id="ch-st"></div></div>
+    <div class="cc"><div class="cct">By Department</div><div id="ch-dp"></div></div>
+    <div class="cc"><div class="cct">By Territory</div><div id="ch-tr"></div></div>
+    <div class="cc"><div class="cct">Inhouse vs Outsource</div><div id="ch-ty"></div></div>
+    <div class="cc"><div class="cct">By Lead Source</div><div id="ch-ls"></div></div>
+  </div>
+</div>
+
+<div class="view" id="v-all">
+  <div class="vh">
+    <div class="vt">All Enquiries</div>
+    <div style="display:flex;gap:7px;"><button class="btn bg sm" onclick="exportCSV()">&#x2B07; CSV</button><button class="btn bp sm" onclick="openAdd()">+ Add</button></div>
+  </div>
+  <div class="tw">
+    <div class="ttb">
+      <div class="sw"><span class="swi">&#x1F50D;</span><input type="text" id="f-search" placeholder="Search..." oninput="renderTbl('all')"></div>
+      <select class="fsel" id="f-fst" onchange="renderTbl('all')"><option value="">All Status</option><option>New Lead</option><option>Sales Reached Out</option><option>RFI Sent</option><option>Quote Sent</option><option>Quote Approved</option><option>Quote Rejected</option><option>Negotiating</option></select>
+      <select class="fsel" id="f-fty" onchange="renderTbl('all')"><option value="">All Types</option><option>Inhouse</option><option>Outsource</option></select>
+      <select class="fsel" id="f-fdp" onchange="renderTbl('all')"><option value="">All Depts</option></select>
+      <select class="fsel" id="f-ftr" onchange="renderTbl('all')"><option value="">All Territories</option><option>North America</option><option>South America</option><option>Europe</option><option>Asia Pacific</option><option>Middle East</option><option>Africa</option><option>Australia</option></select>
+      <select class="fsel" id="f-fsa" onchange="renderTbl('all')"><option value="">All Sales</option></select>
+    </div>
+    <div class="ovf"><table><thead><tr><th>#</th><th>Date</th><th>Client</th><th>Dept</th><th>Work Type</th><th>Territory</th><th>Assigned</th><th>Status</th><th>Type</th><th>Approved</th><th>Cur</th><th>Delivery</th><th>Invoice</th><th>Actions</th></tr></thead><tbody id="tb-all"></tbody></table></div>
+  </div>
+</div>
+
+<div class="view" id="v-leads">
+  <div class="vh"><div class="vt">New Leads</div></div>
+  <div class="tw"><div class="ovf"><table><thead><tr><th>#</th><th>Date</th><th>Client</th><th>Company</th><th>Dept</th><th>Work Type</th><th>Territory</th><th>Assigned</th><th>Status</th><th>Message</th><th>Actions</th></tr></thead><tbody id="tb-leads"></tbody></table></div></div>
+</div>
+
+<div class="view" id="v-quotes">
+  <div class="vh"><div class="vt">Quotes Pipeline</div></div>
+  <div class="tabs"><div class="tab active" onclick="qTab('all',this)">All</div><div class="tab" onclick="qTab('inhouse',this)">Inhouse</div><div class="tab" onclick="qTab('outsource',this)">Outsource</div></div>
+  <div class="tw"><div class="ovf"><table><thead><tr><th>#</th><th>Date</th><th>Client</th><th>Work Type</th><th>Status</th><th>Type</th><th>Hrs</th><th>Days</th><th>Vendor INR</th><th>Quote</th><th>Cur</th><th>Negotiated</th><th>Approved</th><th>Actions</th></tr></thead><tbody id="tb-quotes"></tbody></table></div></div>
+</div>
+
+<div class="view" id="v-delivery">
+  <div class="vh"><div><div class="vt">Project Delivery</div><div class="vsb">Approved projects &middot; retainer &middot; timeline</div></div></div>
+  <div class="tw"><div class="ovf"><table><thead><tr><th>#</th><th>Client</th><th>Company</th><th>Work Type</th><th>Approved</th><th>Cur</th><th>Timeline</th><th>Delivery Date</th><th>Ret %</th><th>Ret Amount</th><th>Ret Status</th><th>Approval Mail</th><th>Actions</th></tr></thead><tbody id="tb-dlv"></tbody></table></div></div>
+</div>
+
+<div class="view" id="v-outsource">
+  <div class="vh"><div><div class="vt">Outsource Projects</div><div class="vsb">Vendor management &middot; Paid-on-paid tracking</div></div></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;" id="os-kpis"></div>
+  <div class="tw"><div class="ovf"><table><thead><tr><th>#</th><th>Client</th><th>Work Type</th><th>Vendor</th><th>Vendor Cost (INR)</th><th>Client Quote</th><th>Client Payment</th><th>Vendor Payable?</th><th>Vendor Invoices</th><th>Actions</th></tr></thead><tbody id="tb-os"></tbody></table></div></div>
+</div>
+
+<div class="view" id="v-invoices">
+  <div class="vh"><div class="vt">Invoices &amp; Payments</div></div>
+  <div id="inv-summary" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;"></div>
+  <div class="tw"><div class="ovf"><table><thead><tr><th>#</th><th>Invoice No.</th><th>Client</th><th>Approved</th><th>Cur</th><th>Retainer</th><th>Ret Status</th><th>Invoice Status</th><th>Zoho Status</th><th>Balance</th><th>Actions</th></tr></thead><tbody id="tb-inv"></tbody></table></div></div>
+</div>
+
+<div class="view" id="v-zoho">
+  <div class="vh"><div><div class="vt">Zoho Books</div><div class="vsb">Postman token &middot; no proxy needed</div></div><div id="zh-vs"></div></div>
+  <div id="zh-banner" style="display:none;background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.22);border-radius:11px;padding:13px 17px;margin-bottom:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;">
+    <div><div style="font-weight:700;color:var(--grn);">&#x2713; Zoho Books Connected</div><div style="font-size:12px;color:var(--t2);margin-top:2px;" id="zh-exp"></div></div>
+    <div style="display:flex;gap:7px;"><button class="btn bg sm" onclick="document.getElementById('zh-rg').style.display='block'">&#x21BB; Refresh Token</button><button class="btn bd sm" onclick="zhDisc()">Disconnect</button></div>
+  </div>
+  <div class="sc" style="margin-bottom:14px;">
+    <div class="sct">&#x1F511; Step 1 &mdash; Credentials</div>
+    <div class="ibox"><strong>A. Client ID + Secret:</strong> <a href="https://api-console.zoho.com" target="_blank" style="color:var(--acc)">api-console.zoho.com</a> &rarr; Self Client<br><strong>B. Org ID:</strong> Zoho Books &rarr; Settings &rarr; Organization Profile</div>
+  </div>
+  <div class="sc" style="margin-bottom:14px;">
+    <div class="sct">&#x1F9EA; Step 2 &mdash; Get Token via Postman</div>
+    <div class="ibox">
+      <strong>1.</strong> Self Client &rarr; Generate Code &rarr; Scope: <code onclick="navigator.clipboard.writeText(this.textContent);showToast('Copied','ok')">ZohoBooks.invoices.READ,ZohoBooks.contacts.READ,ZohoBooks.invoices.UPDATE</code> &rarr; 10 min<br>
+      <strong>2.</strong> POST <code onclick="navigator.clipboard.writeText(this.textContent);showToast('Copied','ok')">https://accounts.zoho.com/oauth/v2/token</code> &mdash; body: grant_type=authorization_code, client_id, client_secret, redirect_uri=https://www.zoho.com, code=GRANT<br>
+      <strong>3.</strong> Copy access_token + refresh_token &rarr; paste below
+    </div>
+    <div class="fgd" style="margin-bottom:11px;">
+      <div class="fg"><label>Client ID</label><input class="fi" id="zh-cid" placeholder="1000.XXXX..."></div>
+      <div class="fg"><label>Client Secret</label><input class="fi" type="password" id="zh-cs"></div>
+      <div class="fg"><label>Organization ID</label><input class="fi" id="zh-org" placeholder="738XXXXXX"></div>
+      <div class="fg"><label>Access Token</label><input class="fi" id="zh-at" placeholder="1000.xxx..."></div>
+      <div class="fg fl"><label>Refresh Token <span style="color:var(--t3);font-size:10px;">(permanent)</span></label><input class="fi" id="zh-rt"></div>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn bp" onclick="zhSave()">&#x2713; Save &amp; Activate</button>
+      <button class="btn bg sm" onclick="zhTest()" id="zh-tb">&#x1F50E; Test Connection</button>
+      <button class="btn bd sm" onclick="zhDisc()">Disconnect</button>
+    </div>
+    <div id="zh-ts" style="margin-top:7px;"></div>
+  </div>
+  <div id="zh-rg" style="display:none;" class="sc" style="margin-bottom:14px;">
+    <div class="sct">&#x21BB; Refresh Token</div>
+    <div class="ibox">POST <code>https://accounts.zoho.com/oauth/v2/token</code> &mdash; body: grant_type=refresh_token, client_id, client_secret, refresh_token &rarr; paste new access_token above &rarr; Save &amp; Activate</div>
+    <button class="btn bg sm" onclick="document.getElementById('zh-rg').style.display='none'">Close</button>
+  </div>
+  <div class="sc" style="margin-bottom:14px;">
+    <div class="sct">&#x1F50D; Lookup Invoice</div>
+    <div style="display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;">
+      <input class="fi" id="zh-li" placeholder="Invoice number or Zoho payment link..." style="flex:1;min-width:220px;">
+      <button class="btn bp" onclick="zhLookup()">&#x1F50E; Fetch</button>
+    </div>
+    <div class="zhic" id="zh-rc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+        <div style="font-size:12px;font-weight:700;color:var(--grn);">&#x2713; FOUND IN ZOHO</div><div id="zh-rb"></div>
+      </div>
+      <div class="zi-grid" id="zh-rg2"></div>
+      <div style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;">
+        <select class="fsel" id="zh-le" style="flex:1;"><option value="">&#x2014; Link to enquiry &#x2014;</option></select>
+        <button class="btn bs" onclick="zhApply()">&#x2713; Apply to Enquiry</button>
+      </div>
+    </div>
+  </div>
+  <div class="sc">
+    <div class="sct">&#x26A1; Bulk Sync All Invoices</div>
+    <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
+      <button class="btn bp" onclick="zhBulk()" id="zh-bb">&#x26A1; Sync All</button>
+      <div style="font-size:12px;color:var(--t3);" id="zh-bs"></div>
+    </div>
+    <div id="zh-br" style="margin-top:10px;"></div>
+  </div>
+</div>
+
+<div class="view" id="v-settings">
+  <div class="vh"><div class="vt">Settings</div></div>
+  <div class="sgd">
+    <div class="sc"><div class="sct">&#x1F464; Sales Team</div><div id="st-s"></div>
+      <div style="display:flex;gap:7px;margin-top:9px;"><input class="fi" id="inp-s" placeholder="Add sales person..." style="flex:1;"><button class="btn bp sm" onclick="addS()">Add</button></div></div>
+    <div class="sc"><div class="sct">&#x1F3E2; Departments</div><div id="st-d"></div>
+      <div style="display:flex;gap:7px;margin-top:9px;"><input class="fi" id="inp-d" placeholder="Add department..." style="flex:1;"><button class="btn bp sm" onclick="addD()">Add</button></div></div>
+    <div class="sc"><div class="sct">&#x1F3ED; Vendors</div><div id="st-v"></div>
+      <div style="display:flex;gap:7px;margin-top:9px;"><input class="fi" id="inp-v" placeholder="Add vendor name..." style="flex:1;"><button class="btn bp sm" onclick="addV()">Add</button></div></div>
+    <div class="sc">
+      <div class="sct">&#x1F4B1; Rates &amp; Pricing</div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:9px;">Controls all auto-calculations.</div>
+      <div class="fgd">
+        <div class="fg"><label>Inhouse Hourly Rate (USD) <span style="color:var(--acc);font-size:10px;" id="r-hr-disp">$25/hr</span></label><input type="number" class="fi" id="r-hr" placeholder="25"></div>
+        <div class="fg"><label>OS Markup Rate (USD)</label><input type="number" class="fi" id="r-os" placeholder="22"><div style="font-size:10px;color:var(--t3);margin-top:3px;">Formula: (INR / <span id="r-div-disp">925</span>) x this</div></div>
+        <div class="fg"><label>OS Divisor (INR)</label><input type="number" class="fi" id="r-div" placeholder="925"></div>
+        <div class="fg"><label>1 USD = INR</label><input type="number" class="fi" id="r-usd" placeholder="83"></div>
+        <div class="fg"><label>1 AED = INR</label><input type="number" class="fi" id="r-aed" placeholder="22.6"></div>
+        <div class="fg"><label>1 GBP = INR</label><input type="number" class="fi" id="r-gbp" placeholder="106"></div>
+      </div>
+      <button class="btn bp sm" onclick="saveRates()" style="margin-top:9px;">Save All Rates</button>
+    </div>
+    <div class="sc fl">
+      <div class="sct">&#x26A1; Make.com Webhook</div>
+      <div style="display:flex;gap:7px;align-items:center;margin-bottom:9px;">
+        <div id="wh-url" style="flex:1;background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:7px 10px;font-size:12px;color:#06b6d4;font-family:monospace;word-break:break-all;"></div>
+        <button class="btn bg sm" onclick="copyWH()">&#x1F4CB; Copy</button>
+        <button class="btn bd sm" onclick="regenWH()">&#x21BA; Regen</button>
+      </div>
+      <button class="btn bs sm" onclick="injectTest()">&#x1F9EA; Inject Test Lead</button>
+    </div>
+    <div class="sc fl">
+      <div class="sct">&#x1F4CA; Microsoft Excel (OneDrive)</div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:12px;">Connect once — all saves sync to Excel automatically. Credentials stored in your browser only, never in the code.</div>
+      <div class="fgd" style="margin-bottom:12px;">
+        <div class="fg">
+          <label>Azure Client ID <span style="color:var(--t3);font-size:10px;">from portal.azure.com</span></label>
+          <input class="fi" id="ms-cid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" type="password">
+        </div>
+        <div class="fg">
+          <label>Azure Tenant ID <span style="color:var(--t3);font-size:10px;">Directory ID</span></label>
+          <input class="fi" id="ms-tid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" type="password">
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:11px;">
+        <button class="btn bp sm" onclick="msSaveAndConnect()">&#x1F517; Save &amp; Connect</button>
+        <div id="ms-badge" class="zhdisc" style="cursor:default;">&#x26A1; Not connected</div>
+        <button class="btn bs sm" onclick="xlSyncFromExcel()">&#x2193; Pull from Excel</button>
+        <button class="btn bp sm" onclick="xlExportAll()">&#x2191; Push all to Excel</button>
+        <button class="btn bd sm" onclick="msDisconnect()">Disconnect</button>
+      </div>
+      <div style="font-size:11px;color:var(--t3);">File: <strong style="color:var(--acc)">EnquiryDesk_PMO.xlsx</strong> on your OneDrive &mdash; auto-created on first connect</div>
+    </div>
+    <div class="sc fl"><div class="sct">&#x1F4BE; Data</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button class="btn bg" onclick="exportCSV()">&#x2B07; Export CSV</button>
+        <button class="btn bd" onclick="clearAll()">&#x1F5D1; Clear All</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main></div>
+
+<div class="overlay" id="m-enq">
+<div class="modal">
+  <div class="mh"><div class="mt" id="m-title">New Enquiry</div><button class="mc" onclick="closeM('m-enq')">&#x2715;</button></div>
+  <div class="mb">
+    <div class="fst" style="margin-top:0;">Client Info</div>
+    <div class="fgd">
+      <div class="fg"><label>Name *</label><input class="fi" id="f-nm"></div>
+      <div class="fg"><label>Email *</label><input class="fi" id="f-em"></div>
+      <div class="fg"><label>Phone</label><input class="fi" id="f-ph"></div>
+      <div class="fg"><label>Company</label><input class="fi" id="f-co"></div>
+      <div class="fg"><label>Territory</label><select class="fi" id="f-tr"><option value="">Select</option><option>North America</option><option>South America</option><option>Europe</option><option>Asia Pacific</option><option>Middle East</option><option>Africa</option><option>Australia</option></select></div>
+      <div class="fg"><label>Country</label><input class="fi" id="f-cn"></div>
+      <div class="fg"><label>Department</label><select class="fi" id="f-dp"><option value="">Select</option></select></div>
+      <div class="fg"><label>Work Type</label><select class="fi" id="f-wt"><option value="">Select</option></select></div>
+      <div class="fg"><label>Date</label><input class="fi" type="date" id="f-dt"></div>
+      <div class="fg"><label>Lead Source</label><input class="fi" id="f-ls" value="Website Enquiry"></div>
+      <div class="fg fl"><label>Message</label><textarea class="fi" id="f-mg"></textarea></div>
+    </div>
+    <div class="fsc"><div class="fst">Assignment</div>
+    <div class="fgd">
+      <div class="fg"><label>Assigned To</label><select class="fi" id="f-as"><option value="">Unassigned</option></select></div>
+      <div class="fg"><label>Status</label><select class="fi" id="f-st" onchange="toggleSec()"><option>New Lead</option><option>Sales Reached Out</option><option>RFI Sent</option><option>Quote Sent</option><option>Quote Approved</option><option>Quote Rejected</option><option>Negotiating</option></select></div>
+      <div class="fg"><label>Type</label><select class="fi" id="f-ty" onchange="toggleType()"><option value="">Select</option><option>Inhouse</option><option>Outsource</option></select></div>
+      <div class="fg"><label>Currency</label><select class="fi" id="f-cu"><option value="USD">USD ($)</option><option value="AED">AED</option><option value="GBP">GBP</option></select></div>
+    </div></div>
+    <div id="s-ih" style="display:none;" class="fsc"><div class="fst">Inhouse Estimation</div>
+      <div class="fgd">
+        <div class="fg"><label>Number of Hours</label><input class="fi" type="number" id="f-hr" placeholder="e.g. 40" oninput="calcIH()"></div>
+        <div class="fg"><label>Number of Days <span style="color:var(--t3);font-size:10px;">(hint: hrs/8)</span></label><input class="fi" type="number" id="f-dy" placeholder="Hint will appear after entering hours"></div>
+      </div>
+      <div class="cbox"><div style="font-size:12px;color:var(--t2);">Hours x hourly rate (converted to selected currency)</div><div class="cres" id="c-ih">Enter hours above</div></div>
+    </div>
+    <div id="s-os" style="display:none;" class="fsc"><div class="fst">Outsource / Vendor</div>
+      <div class="fgd">
+        <div class="fg"><label>Vendor</label><select class="fi" id="f-vd"><option value="">Select vendor</option></select></div>
+        <div class="fg"><label>Vendor Cost (INR)</label><input class="fi" type="number" id="f-vi" placeholder="INR amount" oninput="calcOS()"></div>
+        <div class="fg"><label>Vendor Timeline</label><input class="fi" id="f-vt" placeholder="e.g. 15 days"></div>
+        <div class="fg"><label>Vendor Inv Status</label><select class="fi" id="f-vs"><option value="">--</option><option>Not Raised</option><option>Received</option><option>Partially Paid</option><option>Paid</option></select></div>
+      </div>
+      <div class="cbox-os"><div style="font-size:12px;color:var(--t2);">Indicative quote: (INR / divisor) x markup rate &mdash; <strong style="color:var(--yel)">edit Quote Amount below if different</strong></div><div class="cres-os" id="c-os">Enter vendor cost above</div></div>
+      <div style="margin-top:12px;"><div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;margin-bottom:7px;">Vendor Invoices</div><div id="vinv-list"></div><button type="button" onclick="addVRow()" style="background:transparent;color:var(--t2);border:1px solid var(--b);border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer;">+ Add Invoice</button></div>
+    </div>
+    <div id="s-qt" style="display:none;" class="fsc"><div class="fst">Quote Details</div>
+      <div class="fgd">
+        <div class="fg"><label>Quote Amount</label><input class="fi" type="number" id="f-qa" oninput="this.setAttribute('data-auto','0');calcApp()"></div>
+        <div class="fg"><label>Negotiated Amount <span style="color:var(--t3);font-size:10px;">(if applicable)</span></label><input class="fi" type="number" id="f-ng" oninput="calcApp()"></div>
+        <div class="fg"><label>Approved Cost <span style="color:var(--grn);font-size:10px;">(auto)</span></label><input class="fi" type="number" id="f-ap" style="color:var(--grn);" placeholder="Auto: negotiated if set, else quote" oninput="this.setAttribute('data-manual-ap','1')"></div>
+        <div class="fg" style="grid-column:1/-1"><div id="ap-hint" style="font-size:11px;padding:5px 8px;border-radius:6px;margin-bottom:4px;display:none;"></div></div>
+        <div class="fg"><label>Quote Ref No.</label><input class="fi" id="f-qr" placeholder="QT-2026-001"></div>
+      </div>
+    </div>
+    <div id="s-dl" style="display:none;" class="fsc"><div class="fst">Delivery &amp; Retainer</div>
+      <div class="fgd">
+        <div class="fg"><label>Timeline</label><input class="fi" id="f-tl" placeholder="e.g. 2 weeks"></div>
+        <div class="fg"><label>Delivery Date</label><input class="fi" type="date" id="f-dd"></div>
+        <div class="fg"><label>Retainer %</label><select class="fi" id="f-rp" onchange="calcRet()"><option value="">Select %</option><option value="25">25%</option><option value="50">50%</option><option value="75">75%</option><option value="100">100%</option></select></div>
+        <div class="fg"><label>Retainer Amount <span style="color:var(--yel);font-size:10px;">(auto)</span></label><input class="fi" id="f-ra" readonly style="color:var(--yel);"></div>
+        <div class="fg"><label>Retainer Status</label><select class="fi" id="f-rs"><option value="">--</option><option>Not Raised</option><option>Sent</option><option>Paid</option></select></div>
+        <div class="fg"><label>Approval Mail Sent?</label><select class="fi" id="f-am"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+      </div>
+    </div>
+    <div class="fsc"><div class="fst">Invoice</div>
+      <div class="fgd">
+        <div class="fg"><label>Invoice No.</label><input class="fi" id="f-in" placeholder="INV-2026-001"></div>
+        <div class="fg"><label>Invoice Status</label><select class="fi" id="f-is"><option value="">Not Raised</option><option>Pending</option><option>Sent</option><option>Paid</option><option>Overdue</option></select></div>
+        <div class="fg fl"><label>Payment Link</label><input class="fi" id="f-pl" placeholder="https://billing.gsourcedata.com/..."></div>
+      </div>
+    </div>
+    <div class="fsc"><div class="fst">Notes</div><textarea class="fi" id="f-nt" placeholder="Internal PMO notes..."></textarea></div>
+  </div>
+  <div class="mf"><button class="btn bg" onclick="closeM('m-enq')">Cancel</button><button class="btn bp" onclick="saveEnq()" id="btn-sv">Save Enquiry</button></div>
+</div>
+</div>
+
+<div class="overlay" id="m-parse">
+<div class="modal" style="max-width:580px;">
+  <div class="mh"><div class="mt">Parse Email</div><button class="mc" onclick="closeM('m-parse')">&#x2715;</button></div>
+  <div class="mb">
+    <textarea class="parse-ta" id="pi" placeholder="Paste email body here..."></textarea>
+    <div style="display:flex;gap:7px;margin-top:9px;">
+      <button class="btn bp" onclick="doParseEmail()">&#x2728; Extract Fields</button>
+      <button class="btn bg" onclick="document.getElementById('pi').value=''">Clear</button>
+    </div>
+    <div class="pcard" id="pc"></div>
+  </div>
+  <div class="mf"><button class="btn bg" onclick="closeM('m-parse')">Cancel</button><button class="btn bs" id="btn-up" style="display:none;" onclick="useParsed()">&#x2713; Create Enquiry</button></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+// ── Microsoft Graph / Excel Integration ──────────────────────────────
+// ── Credentials loaded from localStorage — never hardcoded ──────────
+var MS_CLIENT_ID  = '';
+var MS_TENANT_ID  = '';
+var MS_SCOPES     = 'Files.ReadWrite offline_access User.Read';
+var MS_REDIRECT   = 'https://nanigupta12345-dev.github.io/enquirydesk';
+var MS_AUTH_URL   = '';
+var MS_TOKEN_URL  = '';
+var GRAPH         = 'https://graph.microsoft.com/v1.0';
+var EXCEL_FILE    = 'EnquirydeskPMO.xlsx';
+
+function msLoadCreds(){
+  var cid = localStorage.getItem('ms_client_id') || '';
+  var tid = localStorage.getItem('ms_tenant_id') || '';
+  MS_CLIENT_ID = cid;
+  MS_TENANT_ID = tid;
+  MS_AUTH_URL  = 'https://login.microsoftonline.com/'+tid+'/oauth2/v2.0/authorize';
+  MS_TOKEN_URL = 'https://login.microsoftonline.com/'+tid+'/oauth2/v2.0/token';
+}
+
+function msSaveCreds(cid, tid){
+  localStorage.setItem('ms_client_id', cid);
+  localStorage.setItem('ms_tenant_id', tid);
+  MS_CLIENT_ID = cid;
+  MS_TENANT_ID = tid;
+  MS_AUTH_URL  = 'https://login.microsoftonline.com/'+tid+'/oauth2/v2.0/authorize';
+  MS_TOKEN_URL = 'https://login.microsoftonline.com/'+tid+'/oauth2/v2.0/token';
+}
+
+var msToken = { access:'', refresh:'', expiry:0 };
+var excelFileId = '';
+var xlSyncing = false;
+
+var WT = ['Architecture - Design','Architecture - Drafting','Architecture - Construction Documentation',
+  'Structural - Design','Structural - Drafting','Structural - Construction Documentation',
+  'Mechanical - Design','Mechanical - Drafting','Mechanical - Construction Documentation',
+  'Electrical - Design','Electrical - Drafting','Electrical - Construction Documentation',
+  'Plumbing - Design','Plumbing - Drafting','Plumbing - Construction Documentation',
+  'Fire Protection - Design','Fire Protection - Drafting','Fire Protection - Construction Documentation'];
+var STATS = ['New Lead','Sales Reached Out','RFI Sent','Quote Sent','Quote Approved','Quote Rejected','Negotiating'];
+var DB = {enquiries:[],
+  salesTeam:['Aniket Shinde','Biney Bhat','PMO Team','Deepak Patkar','Rahil Shah','Akshay Khairate','Adnan Ghariyali','Akhilesh Mourya','Rahul Mahadik'],
+  departments:['Land Surveying','Civil Engineering','Architecture','Other','Structural','MEP','Signage & Graphic','Visualisation'],
+  vendors:['DraftPro Ltd','CAD Solutions India'],
+  rates:{USD:83,AED:22.6,GBP:106},hourlyRate:25,osMarkupRate:22,osDivisor:925,nextId:1};
+var eid=null, pd={}, zhT={at:'',rt:'',org:'',cid:'',cs:'',savedAt:0}, lastInv=null, whs='', qtf='all';
+
+// ============================================================
+// DB
+// ============================================================
+function loadDB(){
+  var s=localStorage.getItem('edpmo5');
+  if(s){
+    try{
+      var parsed=JSON.parse(s);
+      // Only use parsed data if it has the right structure
+      if(parsed&&typeof parsed==='object'){DB=parsed;}
+    }catch(e){}
+  }
+  // Ensure all required fields exist without wiping data
+  if(!DB.rates)DB.rates={USD:83,AED:22.6,GBP:106};
+  if(!DB.vendors)DB.vendors=[];
+  if(!DB.hourlyRate)DB.hourlyRate=25;
+  if(!DB.osMarkupRate)DB.osMarkupRate=22;
+  if(!DB.osDivisor)DB.osDivisor=925;
+  if(!DB.enquiries)DB.enquiries=[];
+  if(!DB.salesTeam)DB.salesTeam=['Raj Kumar','Priya Singh','Amit Sharma'];
+  if(!DB.departments)DB.departments=['Land Surveying','Civil Engineering','Architecture','Other'];
+  if(!DB.nextId)DB.nextId=1;
+  // Only seed demo if this is genuinely first ever load (no localStorage key at all)
+  if(!s && DB.enquiries.length===0){
+    // Check flag - never auto-seed again after first time
+    var seeded=localStorage.getItem('edpmo5_seeded');
+    if(!seeded){
+      seedDemo();
+      localStorage.setItem('edpmo5_seeded','1');
+    }
+  }
+}
+function saveDB(){
+  try{
+    var serialized=JSON.stringify(DB);
+    localStorage.setItem('edpmo5',serialized);
+    // Verify it saved correctly
+    var verify=localStorage.getItem('edpmo5');
+    if(!verify){
+      console.error('localStorage save failed - storage may be full or blocked');
+    }
+  }catch(e){
+    console.error('saveDB error:',e.message);
+    showToast('Warning: Could not save data locally. Connect Excel for persistent storage.','err');
+  }
+}
+
+function seedDemo(){
+  var t=new Date().toISOString().split('T')[0];
+  var items=[
+    {name:'Sasha Bhadur',email:'sasha@allstatemapping.com',phone:'9736470774',company:'Allstate Mapping',territory:'North America',country:'United States',department:'Land Surveying',workType:'Structural - Drafting',date:'2026-03-13',status:'Quote Approved',type:'Inhouse',currency:'USD',hours:80,days:10,quote:2000,negotiated:'',approved:2000,quoteRef:'QT-2026-001',timeline:'2 weeks',delivery:t,retainerPct:'50',retainerAmt:1000,retainerStatus:'Paid',approvalMail:'Yes',invoiceNo:'INV-2026-001',invoiceStatus:'Sent',payLink:'',vendorName:'',vendorINR:'',vendorTimeline:'',vendorInvStatus:'',vendorInvoices:[],message:'Daily drafting services.',notes:'Priority client',assigned:'Aniket Shinde',source:'Website Enquiry',zohoStatus:'',zohoBalance:'',zohoDueDate:'',zohoLastSync:'',zohoInvId:''},
+    {name:'James Carter',email:'jcarter@infratech.com',phone:'4089221100',company:'InfraTech Corp',territory:'North America',country:'United States',department:'Civil Engineering',workType:'Structural - Construction Documentation',date:'2026-03-10',status:'Quote Sent',type:'Outsource',currency:'USD',hours:'',days:'',quote:4987,negotiated:'',approved:'',quoteRef:'QT-2026-002',timeline:'',delivery:'',retainerPct:'',retainerAmt:'',retainerStatus:'',approvalMail:'No',invoiceNo:'',invoiceStatus:'',payLink:'',vendorName:'DraftPro Ltd',vendorINR:210000,vendorTimeline:'15 days',vendorInvStatus:'Received',vendorInvoices:[{num:'VIN-001',amt:105000,status:'Pending'}],message:'Bridge civil drafting.',notes:'',assigned:'Biney Bhat',source:'Website Enquiry',zohoStatus:'',zohoBalance:'',zohoDueDate:'',zohoLastSync:'',zohoInvId:''},
+    {name:'Ahmed Al Rashid',email:'ahmed@gulfbuild.ae',phone:'+971501234567',company:'Gulf Build LLC',territory:'Middle East',country:'UAE',department:'Architecture',workType:'Electrical - Drafting',date:'2026-03-15',status:'New Lead',type:'',currency:'AED',hours:'',days:'',quote:'',negotiated:'',approved:'',quoteRef:'',timeline:'',delivery:'',retainerPct:'',retainerAmt:'',retainerStatus:'',approvalMail:'No',invoiceNo:'',invoiceStatus:'',payLink:'',vendorName:'',vendorINR:'',vendorTimeline:'',vendorInvStatus:'',vendorInvoices:[],message:'MEP drawings for commercial tower.',notes:'Hot lead',assigned:'Raj Kumar',source:'Website Enquiry',zohoStatus:'',zohoBalance:'',zohoDueDate:'',zohoLastSync:'',zohoInvId:''},
+    {name:'Sarah Lee',email:'sarah@buildaus.com.au',phone:'+61291234567',company:'Build Australia',territory:'Australia',country:'Australia',department:'Civil Engineering',workType:'Plumbing - Construction Documentation',date:'2026-02-28',status:'Quote Approved',type:'Outsource',currency:'USD',hours:'',days:'',quote:7040,negotiated:6500,approved:6500,quoteRef:'QT-2026-003',timeline:'3 weeks',delivery:'2026-03-25',retainerPct:'50',retainerAmt:3250,retainerStatus:'Paid',approvalMail:'Yes',invoiceNo:'INV-2026-002',invoiceStatus:'Paid',payLink:'https://billing.gsourcedata.com/portal/gsourcedata/secure?CInvoiceID=2-sample',vendorName:'CAD Solutions India',vendorINR:280000,vendorTimeline:'18 days',vendorInvStatus:'Paid',vendorInvoices:[{num:'VIN-SA-001',amt:140000,status:'Paid'},{num:'VIN-SA-002',amt:140000,status:'Paid'}],message:'Drainage design subdivision.',notes:'Negotiated from $7040 to $6500.',assigned:'Priya Singh',source:'Website Enquiry',zohoStatus:'paid',zohoBalance:0,zohoDueDate:'2026-03-15',zohoLastSync:new Date().toISOString(),zohoInvId:'4815162342'}
+  ];
+  items.forEach(function(e){e.id=DB.nextId++;DB.enquiries.push(e);});
+  saveDB();
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function navTo(v){
+  document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.ni').forEach(function(x){x.classList.remove('active');});
+  var ve=document.getElementById('v-'+v);
+  if(ve)ve.classList.add('active');
+  var ne=document.querySelector('.ni[onclick="navTo(\''+v+'\')"]');
+  if(ne)ne.classList.add('active');
+  var map={dashboard:renderDash,all:function(){renderTbl('all');},leads:function(){renderTbl('leads');},
+    quotes:function(){renderTbl('quotes');},delivery:function(){renderTbl('dlv');},
+    outsource:function(){renderOsKpis();renderTbl('os');},invoices:function(){renderTbl('inv');},
+    settings:renderSettings,zoho:function(){loadZH();zhBadge();}};
+  if(map[v])map[v]();
+}
+function qTab(v,el){
+  qtf=v;
+  el.closest('.tabs').querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  renderTbl('quotes');
+}
+
+// ============================================================
+// POPULATE SELECTS
+// ============================================================
+function popSels(){
+  var wtEl=document.getElementById('f-wt');
+  if(wtEl)wtEl.innerHTML='<option value="">Select work type</option>'+WT.map(function(w){return '<option>'+w+'</option>';}).join('');
+  var dpEl=document.getElementById('f-dp');
+  if(dpEl)dpEl.innerHTML='<option value="">Select</option>'+DB.departments.map(function(d){return '<option>'+d+'</option>';}).join('');
+  var asEl=document.getElementById('f-as');
+  if(asEl)asEl.innerHTML='<option value="">Unassigned</option>'+DB.salesTeam.map(function(s){return '<option>'+s+'</option>';}).join('');
+  var vdEl=document.getElementById('f-vd');
+  if(vdEl)vdEl.innerHTML='<option value="">Select vendor</option>'+(DB.vendors||[]).map(function(v){return '<option>'+v+'</option>';}).join('');
+  var ffdp=document.getElementById('f-fdp');
+  if(ffdp)ffdp.innerHTML='<option value="">All Depts</option>'+DB.departments.map(function(d){return '<option>'+d+'</option>';}).join('');
+  var ffsa=document.getElementById('f-fsa');
+  if(ffsa)ffsa.innerHTML='<option value="">All Sales</option>'+DB.salesTeam.map(function(s){return '<option>'+s+'</option>';}).join('');
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDash(){
+  var rng=document.getElementById('dash-rng').value,now=new Date(),today=now.toISOString().split('T')[0];
+  var data=DB.enquiries.filter(function(e){
+    if(rng==='all')return true;
+    var d=new Date(e.date);
+    if(rng==='week'){var w=new Date(now);w.setDate(w.getDate()-7);return d>=w;}
+    return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+  });
+  var appr=data.filter(function(e){return e.status==='Quote Approved';});
+  var rev=appr.reduce(function(a,e){return a+Number(e.approved||e.quote||0);},0);
+  var vpay=data.filter(function(e){return e.type==='Outsource'&&e.status==='Quote Approved';})
+    .reduce(function(a,e){return a+Number(e.vendorINR||0);},0);
+  var dueT=data.filter(function(e){return e.delivery===today;}).length;
+  var pendingCnt=data.filter(function(e){return ['Quote Sent','Negotiating'].includes(e.status);}).length;
+  document.getElementById('kstrip').innerHTML=
+    kpiCard('kb','Total',data.length,'enquiries','none')
+    +kpiCard('kg','Approved',appr.length,'quote approved',appr.length>0?'ok':'none')
+    +kpiCard('ky','Pending',pendingCnt,'awaiting decision',pendingCnt>0?'warn':'ok')
+    +kpiCard('kr','Due Today',dueT,'delivery today',dueT>0?'alert':'ok')
+    +kpiCard('kp','Revenue (USD)','$'+Math.round(rev).toLocaleString(),'approved projects',rev>0?'ok':'none')
+    +kpiCard('ko','Vendor Payable (INR)','₹'+Math.round(vpay).toLocaleString('en-IN'),'total vendor cost',vpay>0?'warn':'none');
+  barC('ch-st',STATS,function(s){return data.filter(function(e){return e.status===s;}).length;},['#3b82f6','#8b5cf6','#f59e0b','#06b6d4','#10b981','#ef4444','#f97316']);
+  barC('ch-dp',DB.departments,function(d){return data.filter(function(e){return e.department===d;}).length;},['#3b82f6','#10b981','#8b5cf6','#f59e0b']);
+  var terrs=[];data.forEach(function(e){if(e.territory&&!terrs.includes(e.territory))terrs.push(e.territory);});
+  barC('ch-tr',terrs,function(t){return data.filter(function(e){return e.territory===t;}).length;},['#06b6d4','#3b82f6','#10b981','#8b5cf6','#f59e0b','#f97316','#ec4899']);
+  var ih=data.filter(function(e){return e.type==='Inhouse';}).length;
+  var os=data.filter(function(e){return e.type==='Outsource';}).length;
+  var tot=ih+os||1;
+  document.getElementById('ch-ty').innerHTML='<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;margin-bottom:10px;">'
+    +'<div style="width:'+Math.round(ih/tot*100)+'%;background:var(--grn);transition:width .7s"></div>'
+    +'<div style="width:'+Math.round(os/tot*100)+'%;background:var(--org);transition:width .7s"></div></div>'
+    +'<div style="display:flex;gap:14px;font-size:12px;color:var(--t2);">'
+    +'<span>Inhouse: '+ih+' ('+Math.round(ih/tot*100)+'%)</span>'
+    +'<span>Outsource: '+os+' ('+Math.round(os/tot*100)+'%)</span></div>';
+  // ── Retainer KPI Strip ──
+  var apprAll=DB.enquiries.filter(function(e){return e.status==='Quote Approved';});
+  var retRaised=apprAll.filter(function(e){return e.retainerStatus==='Sent'||e.retainerStatus==='Paid';});
+  var retPaid=apprAll.filter(function(e){return e.retainerStatus==='Paid';});
+  var retPending=apprAll.filter(function(e){return !e.retainerStatus||e.retainerStatus==='Not Raised';});
+  var retCollected=retPaid.reduce(function(a,e){return a+Number(e.retainerAmt||0);},0);
+  var totalApproved=apprAll.reduce(function(a,e){return a+Number(e.approved||e.quote||0);},0);
+  var balToInvoice=totalApproved-retCollected;
+  var rs=document.getElementById('ret-strip');
+  if(rs){
+    var retSentOnly=apprAll.filter(function(e){return e.retainerStatus==='Sent';});
+    var retSentAmt=retSentOnly.reduce(function(a,e){return a+Number(e.retainerAmt||0);},0);
+    rs.innerHTML=
+      kpiCard('kb','Approved Projects',apprAll.length,'quote approved','none')
+      +kpiCard('kr','Retainer Not Raised',retPending.length,'of '+apprAll.length+' approved',retPending.length>0?'alert':'ok')
+      +kpiCard('ky','Retainer Sent',retSentOnly.length,'$'+Math.round(retSentAmt).toLocaleString()+' awaiting payment',retSentOnly.length>0?'warn':'none')
+      +kpiCard('kg','Retainer Collected',retPaid.length,'$'+Math.round(retCollected).toLocaleString()+' received',retPaid.length>0?'ok':'none')
+      +kpiCard('kp','Balance to Invoice','$'+Math.round(balToInvoice).toLocaleString(),'approved minus collected',balToInvoice>0?'warn':'ok');
+  }
+
+  // ── Lead Source chart ──
+  var sources={};
+  data.forEach(function(e){
+    var src=e.territory||e.source||'Unknown';
+    sources[src]=(sources[src]||0)+1;
+  });
+  var srcLabels=Object.keys(sources);
+  var srcColors=['#3b82f6','#10b981','#8b5cf6','#f59e0b','#f97316','#ef4444','#06b6d4'];
+  barC('ch-ls',srcLabels,function(s){return sources[s]||0;},srcColors);
+
+  // ── Today deliveries alert ──
+  var tdy=DB.enquiries.filter(function(e){return e.delivery===today;});
+  var ta=document.getElementById('today-alert');
+  if(tdy.length){
+    ta.style.display='block';
+    document.getElementById('today-list').innerHTML=tdy.map(function(e){
+      return '<div style="margin-bottom:3px;">&bull; <strong style="color:var(--t1)">'+e.name+'</strong> &mdash; '+e.company+' &mdash; '+(e.workType||e.department||'')+'</div>';
+    }).join('');
+  }else ta.style.display='none';
+  updateBadges();
+}
+
+function kpiCard(cls, label, value, sub, ind) {
+  var icons = {ok:'&#x2713;', warn:'&#x26A0;', alert:'&#x2757;', info:'&#x2139;', none:''};
+  var icls  = {ok:'kpi-ok',  warn:'kpi-warn', alert:'kpi-alert', info:'kpi-ok', none:''};
+  var icon  = ind && icons[ind] ? '<div class="kpi-ind '+icls[ind]+'">'+icons[ind]+'</div>' : '';
+  return '<div class="kpi '+cls+'">'
+    + icon
+    + '<div class="kl">'+label+'</div>'
+    + '<div class="kv">'+value+'</div>'
+    + '<div class="ks">'+sub+'</div>'
+    + '</div>';
+}
+
+function barC(id,labels,fn,colors){
+  var vals=labels.map(fn),max=Math.max.apply(null,vals.concat([1]));
+  document.getElementById(id).innerHTML=labels.map(function(l,i){
+    return '<div class="br"><div class="bl" title="'+l+'">'+l+'</div><div class="bt"><div class="bf" style="width:'+Math.round(vals[i]/max*100)+'%;background:'+colors[i%colors.length]+'"></div></div><div class="bn">'+vals[i]+'</div></div>';
+  }).join('')||'<div style="color:var(--t3);font-size:12px;">No data</div>';
+}
+
+// ============================================================
+// TABLES - all use string concatenation, zero nested backticks
+// ============================================================
+function renderAll(){['all','leads','quotes','dlv','os','inv'].forEach(function(t){renderTbl(t);});}
+function gv(id){return(document.getElementById(id)||{}).value||'';}
+function er(c){return '<tr><td colspan="'+c+'" style="text-align:center;padding:30px;color:var(--t3);">No records found</td></tr>';}
+function sym(cur){return cur==='GBP'?'\u00a3':cur==='AED'?'AED ':' $';}
+
+function renderTbl(type){
+  var today=new Date().toISOString().split('T')[0];
+  var data=DB.enquiries.slice();
+  var h='',tbody;
+
+  if(type==='all'){
+    var q=gv('f-search').toLowerCase(),fs=gv('f-fst'),ft=gv('f-fty'),fd=gv('f-fdp'),ftr=gv('f-ftr'),fsa=gv('f-fsa');
+    if(q)data=data.filter(function(e){return (e.name+e.company+e.email).toLowerCase().indexOf(q)>=0;});
+    if(fs)data=data.filter(function(e){return e.status===fs;});
+    if(ft)data=data.filter(function(e){return e.type===ft;});
+    if(fd)data=data.filter(function(e){return e.department===fd;});
+    if(ftr)data=data.filter(function(e){return e.territory===ftr;});
+    if(fsa)data=data.filter(function(e){return e.assigned===fsa;});
+    data.forEach(function(e,i){
+      var isTdy=e.delivery===today;
+      var appAmt=(e.approved||e.quote)?sym(e.currency)+Number(e.approved||e.quote||0).toLocaleString():'&mdash;';
+      var dlvCell=e.delivery?e.delivery+(isTdy?'<span class="ttag">TODAY</span>':''):'&mdash;';
+      h+='<tr class="'+(isTdy?'rt':'')+'" onclick="openEdit('+e.id+')">'
+        +'<td><span style="color:var(--t3)">'+(i+1)+'</span></td>'
+        +'<td>'+fmtD(e.date)+'</td>'
+        +'<td><div class="cm">'+e.name+'</div><div class="cs">'+(e.company||'')+'</div></td>'
+        +'<td>'+(e.department||'&mdash;')+'</td>'
+        +'<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">'+(e.workType||'&mdash;')+'</td>'
+        +'<td>'+(e.territory||'&mdash;')+'</td>'
+        +'<td>'+(e.assigned||'&mdash;')+'</td>'
+        +'<td>'+sb(e.status)+'</td>'
+        +'<td>'+tb(e.type)+'</td>'
+        +'<td style="color:var(--grn);font-weight:500">'+appAmt+'</td>'
+        +'<td><span style="font-size:11px;color:var(--t2)">'+(e.currency||'USD')+'</span></td>'
+        +'<td>'+dlvCell+'</td>'
+        +'<td>'+ib(e.invoiceStatus)+'</td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button> <button class="btn bd xs" onclick="delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-all').innerHTML=h||er(14);
+  }
+
+  if(type==='leads'){
+    data=DB.enquiries.filter(function(e){return e.status==='New Lead'||e.status==='Sales Reached Out';});
+    data.forEach(function(e,i){
+      h+='<tr onclick="openEdit('+e.id+')">'
+        +'<td>'+(i+1)+'</td><td>'+fmtD(e.date)+'</td>'
+        +'<td><div class="cm">'+e.name+'</div><div class="cs">'+e.email+'</div></td>'
+        +'<td>'+(e.company||'&mdash;')+'</td>'
+        +'<td>'+(e.department||'&mdash;')+'</td>'
+        +'<td style="max-width:110px;overflow:hidden;text-overflow:ellipsis;">'+(e.workType||'&mdash;')+'</td>'
+        +'<td>'+(e.territory||'&mdash;')+'</td>'
+        +'<td>'+(e.assigned||'&mdash;')+'</td>'
+        +'<td>'+sb(e.status)+'</td>'
+        +'<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;color:var(--t2)">'+(e.message||'&mdash;')+'</td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button><button class="btn bd xs" onclick="event.stopPropagation();delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-leads').innerHTML=h||er(11);
+  }
+
+  if(type==='quotes'){
+    data=DB.enquiries.filter(function(e){return ['Quote Sent','Quote Approved','Quote Rejected','Negotiating'].includes(e.status);});
+    if(qtf==='inhouse')data=data.filter(function(e){return e.type==='Inhouse';});
+    if(qtf==='outsource')data=data.filter(function(e){return e.type==='Outsource';});
+    data.forEach(function(e,i){
+      var s=sym(e.currency);
+      var qAmt=e.quote?s+Number(e.quote).toLocaleString():'&mdash;';
+      var nAmt=e.negotiated?s+Number(e.negotiated).toLocaleString():'&mdash;';
+      var aAmt=e.approved?'<strong style="color:var(--grn)">'+s+Number(e.approved).toLocaleString()+'</strong>':'&mdash;';
+      var vCost=e.vendorINR?'\u20b9'+Number(e.vendorINR).toLocaleString('en-IN'):'&mdash;';
+      h+='<tr onclick="openEdit('+e.id+')">'
+        +'<td>'+(i+1)+'</td><td>'+fmtD(e.date)+'</td>'
+        +'<td><div class="cm">'+e.name+'</div><div class="cs">'+(e.company||'')+'</div></td>'
+        +'<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">'+(e.workType||'&mdash;')+'</td>'
+        +'<td>'+sb(e.status)+'</td>'
+        +'<td>'+tb(e.type)+'</td>'
+        +'<td>'+(e.hours||'&mdash;')+'</td>'
+        +'<td>'+(e.days||'&mdash;')+'</td>'
+        +'<td>'+vCost+'</td>'
+        +'<td>'+qAmt+'</td>'
+        +'<td><span style="font-size:11px;color:var(--t2)">'+(e.currency||'USD')+'</span></td>'
+        +'<td>'+nAmt+'</td>'
+        +'<td>'+aAmt+'</td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button><button class="btn bd xs" onclick="event.stopPropagation();delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-quotes').innerHTML=h||er(14);
+  }
+
+  if(type==='dlv'){
+    data=DB.enquiries.filter(function(e){return e.status==='Quote Approved';});
+    data.forEach(function(e,i){
+      var isTdy=e.delivery===today;
+      var s=sym(e.currency);
+      var aAmt=(e.approved||e.quote)?s+Number(e.approved||e.quote||0).toLocaleString():'&mdash;';
+      var dlvCell=e.delivery?'<span style="color:'+(isTdy?'var(--red)':'var(--t1)')+'">'+e.delivery+'</span>'+(isTdy?'<span class="ttag">TODAY</span>':''):'Not set';
+      var rAmt=e.retainerAmt?s+Number(e.retainerAmt).toLocaleString():'&mdash;';
+      h+='<tr class="'+(isTdy?'rt':'')+'" onclick="openEdit('+e.id+')">'
+        +'<td>'+(i+1)+'</td>'
+        +'<td><div class="cm">'+e.name+'</div></td>'
+        +'<td>'+(e.company||'&mdash;')+'</td>'
+        +'<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">'+(e.workType||'&mdash;')+'</td>'
+        +'<td style="color:var(--grn);font-weight:500">'+aAmt+'</td>'
+        +'<td>'+(e.currency||'USD')+'</td>'
+        +'<td>'+(e.timeline||'&mdash;')+'</td>'
+        +'<td>'+dlvCell+'</td>'
+        +'<td>'+(e.retainerPct?e.retainerPct+'%':'&mdash;')+'</td>'
+        +'<td>'+rAmt+'</td>'
+        +'<td>'+rb(e.retainerStatus)+'</td>'
+        +'<td><span class="badge '+(e.approvalMail==='Yes'?'bpaid':'bpd')+'">'+(e.approvalMail||'No')+'</span></td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button><button class="btn bd xs" onclick="event.stopPropagation();delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-dlv').innerHTML=h||er(13);
+  }
+
+  if(type==='os'){
+    data=DB.enquiries.filter(function(e){return e.type==='Outsource';});
+    data.forEach(function(e,i){
+      var cPaid=e.invoiceStatus==='Paid';
+      var s=sym(e.currency);
+      var aAmt=(e.approved||e.quote)?s+Number(e.approved||e.quote||0).toLocaleString():'&mdash;';
+      var vCost=e.vendorINR?'\u20b9'+Number(e.vendorINR).toLocaleString('en-IN'):'&mdash;';
+      var vinvs=e.vendorInvoices||[];
+      var vinvH='';
+      vinvs.forEach(function(v){
+        vinvH+='<div style="font-size:11px;margin-bottom:2px;">\u20b9'+Number(v.amt||0).toLocaleString('en-IN')
+          +' <span class="badge '+(v.status==='Paid'?'bpaid':'bpd')+'">'+v.status+'</span></div>';
+      });
+      if(!vinvH)vinvH='&mdash;';
+      var vPayable=e.vendorINR?'₹'+Number(e.vendorINR).toLocaleString('en-IN'):'&mdash;';
+    var payBadge=cPaid
+        ?'<span class="pop ok">&#x1F513; '+vPayable+' &mdash; Can Pay</span>'
+        :'<span class="pop">&#x1F512; '+vPayable+' &mdash; Awaiting Client</span>';
+      h+='<tr onclick="openEdit('+e.id+')">'
+        +'<td>'+(i+1)+'</td>'
+        +'<td><div class="cm">'+e.name+'</div><div class="cs">'+(e.company||'')+'</div></td>'
+        +'<td style="max-width:120px;overflow:hidden;text-overflow:ellipsis;">'+(e.workType||'&mdash;')+'</td>'
+        +'<td>'+(e.vendorName||'&mdash;')+'</td>'
+        +'<td>'+vCost+'</td>'
+        +'<td style="color:var(--grn);font-weight:500">'+aAmt+'</td>'
+        +'<td>'+ib(e.invoiceStatus)+'</td>'
+        +'<td>'+payBadge+'</td>'
+        +'<td>'+vinvH+'</td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button><button class="btn bd xs" onclick="event.stopPropagation();delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-os').innerHTML=h||er(10);
+  }
+
+  if(type==='inv'){
+    // Invoice summary KPIs
+    var invSumEl=document.getElementById('inv-summary');
+    if(invSumEl){
+      var apprInv=DB.enquiries.filter(function(e){return e.status==='Quote Approved';});
+      var retSent=apprInv.filter(function(e){return e.retainerStatus==='Sent'||e.retainerStatus==='Paid';});
+      var retPd=apprInv.filter(function(e){return e.retainerStatus==='Paid';});
+      var invPaid=apprInv.filter(function(e){return e.invoiceStatus==='Paid';});
+      var invPending=apprInv.filter(function(e){return e.invoiceNo&&e.invoiceStatus!=='Paid';});
+      var totalRet=retPd.reduce(function(a,e){return a+Number(e.retainerAmt||0);},0);
+      var totalInv=invPaid.reduce(function(a,e){return a+Number(e.approved||e.quote||0);},0);
+      invSumEl.innerHTML=
+        kpiCard('ky','Retainer Raised',retSent.length,'of '+apprInv.length+' approved',retSent.length===apprInv.length&&apprInv.length>0?'ok':retSent.length>0?'warn':'alert')
+        +kpiCard('kg','Retainer Collected','$'+Math.round(totalRet).toLocaleString(),'credits in Zoho Books',totalRet>0?'ok':'none')
+        +kpiCard('kb','Final Invoice Pending',invPending.length,'awaiting payment',invPending.length>0?'warn':'ok')
+        +kpiCard('kp','Fully Invoiced',invPaid.length,'projects closed',invPaid.length>0?'ok':'none');
+    }
+    data=DB.enquiries.filter(function(e){return e.invoiceNo||e.invoiceStatus||e.retainerStatus;});
+    data.forEach(function(e,i){
+      var s=sym(e.currency);
+      var aAmt=(e.approved||e.quote)?s+Number(e.approved||e.quote||0).toLocaleString():'&mdash;';
+      var retCell=e.retainerAmt?s+Number(e.retainerAmt).toLocaleString()+' ('+(e.retainerPct||'')+'%)':'&mdash;';
+      var retSt=e.retainerStatus?'<span class="badge '+(e.retainerStatus==='Paid'?'bpaid':e.retainerStatus==='Sent'?'bst':'bpd')+'">'+e.retainerStatus+'</span>':'&mdash;';
+      var zhCell=e.zohoStatus?'<span class="badge '+(e.zohoStatus==='paid'?'bpaid':e.zohoStatus==='overdue'?'bovd':'bpd')+'">'+e.zohoStatus.toUpperCase()+'</span>':'<span style="color:var(--t3);font-size:11px">Not synced</span>';
+      var syncCell=e.zohoLastSync?'<div style="font-size:10px;color:var(--t3)">'+new Date(e.zohoLastSync).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})+'</div>':'';
+      var balCell=(e.zohoBalance!==undefined&&e.zohoBalance!=='')?'<span style="color:'+(Number(e.zohoBalance)===0?'var(--grn)':'var(--yel)')+'">'+s+Number(e.zohoBalance).toLocaleString()+'</span>':'&mdash;';
+      h+='<tr onclick="openEdit('+e.id+')">'
+        +'<td>'+(i+1)+'</td>'
+        +'<td style="color:var(--acc);font-weight:500">'+(e.invoiceNo||'&mdash;')+'</td>'
+        +'<td><div class="cm">'+e.name+'</div><div class="cs">'+(e.company||'')+'</div></td>'
+        +'<td style="color:var(--grn);font-weight:500">'+aAmt+'</td>'
+        +'<td><span style="font-size:11px;color:var(--t2)">'+(e.currency||'USD')+'</span></td>'
+        +'<td>'+retCell+'</td>'
+        +'<td>'+retSt+'</td>'
+        +'<td>'+ib(e.invoiceStatus)+'</td>'
+        +'<td>'+zhCell+syncCell+'</td>'
+        +'<td>'+balCell+'</td>'
+        +'<td onclick="event.stopPropagation()"><div class="ac"><button class="zhsync" onclick="zhSyncRow('+e.id+')">\u21bb Zoho</button><button class="btn bg xs" onclick="openEdit('+e.id+')">Edit</button><button class="btn bd xs" onclick="event.stopPropagation();delE('+e.id+')">Del</button></div></td>'
+        +'</tr>';
+    });
+    document.getElementById('tb-inv').innerHTML=h||er(11);
+  }
+
+  updateBadges();
+}
+
+function renderOsKpis(){
+  var data=DB.enquiries.filter(function(e){return e.type==='Outsource';});
+  var appr=data.filter(function(e){return e.status==='Quote Approved';});
+  var tvi=data.reduce(function(a,e){return a+Number(e.vendorINR||0);},0);
+  var cp=appr.filter(function(e){return e.invoiceStatus==='Paid';}).reduce(function(a,e){return a+Number(e.approved||0);},0);
+  var vp=0;
+  data.forEach(function(e){(e.vendorInvoices||[]).forEach(function(v){if(v.status==='Paid')vp+=Number(v.amt||0);});});
+  var el=document.getElementById('os-kpis');
+  if(!el)return;
+  el.innerHTML=[
+    {c:'ko',l:'Outsource Projects',v:data.length,s:'total'},
+    {c:'kb',l:'Vendor Cost (INR)',v:'\u20b9'+Math.round(tvi/1000)+'K',s:'total outsourced'},
+    {c:'kg',l:'Client Paid',v:'$'+Math.round(cp).toLocaleString(),s:'received'},
+    {c:'ky',l:'Vendor Paid',v:'₹'+Math.round(vp).toLocaleString('en-IN'),s:'paid to vendors'}
+  ].map(function(k){return '<div class="kpi '+k.c+'"><div class="kl">'+k.l+'</div><div class="kv">'+k.v+'</div><div class="ks">'+k.s+'</div></div>';}).join('');
+}
+
+// ============================================================
+// MODAL - ADD / EDIT
+// ============================================================
+function openAdd(){
+  eid=null;
+  document.getElementById('m-title').textContent='New Enquiry';
+  document.getElementById('btn-sv').textContent='Save Enquiry';
+  popSels();clearF();
+  document.getElementById('f-dt').value=new Date().toISOString().split('T')[0];
+  document.getElementById('m-enq').classList.add('open');
+}
+
+function openEdit(id){
+  eid=id;var e=DB.enquiries.find(function(x){return x.id===id;});
+  if(!e)return;
+  document.getElementById('m-title').textContent='Edit \u2014 '+e.name;
+  document.getElementById('btn-sv').textContent='Update Enquiry';
+  popSels();clearF();
+  var fmap={
+    'f-nm':e.name,'f-em':e.email,'f-ph':e.phone||'','f-co':e.company||'',
+    'f-tr':e.territory||'','f-cn':e.country||'','f-dp':e.department||'',
+    'f-wt':e.workType||'','f-dt':e.date||'','f-ls':e.source||'Website Enquiry',
+    'f-mg':e.message||'','f-as':e.assigned||'','f-st':e.status||'New Lead',
+    'f-ty':e.type||'','f-cu':e.currency||'USD',
+    'f-hr':e.hours||'','f-dy':e.days||'',
+    'f-vd':e.vendorName||'','f-vi':e.vendorINR||'','f-vt':e.vendorTimeline||'','f-vs':e.vendorInvStatus||'',
+    'f-qa':e.quote||'','f-ng':e.negotiated||'','f-ap':e.approved||'','f-qr':e.quoteRef||'',
+    'f-tl':e.timeline||'','f-dd':e.delivery||'',
+    'f-rp':e.retainerPct||'','f-ra':e.retainerAmt||'','f-rs':e.retainerStatus||'','f-am':e.approvalMail||'No',
+    'f-in':e.invoiceNo||'','f-is':e.invoiceStatus||'','f-pl':e.payLink||'','f-nt':e.notes||''
+  };
+  Object.keys(fmap).forEach(function(id){var el=document.getElementById(id);if(el)el.value=fmap[id];});
+  var vl=document.getElementById('vinv-list');if(vl){vl.innerHTML='';(e.vendorInvoices||[]).forEach(function(v){addVRow(v);});}
+  // Mark quote as user-set BEFORE calling toggleType/calcOS so auto-calc won't overwrite it
+  var qEl2=document.getElementById('f-qa');
+  if(qEl2&&e.quote)qEl2.setAttribute('data-auto','0');
+  // If approved differs from both quote and negotiated, it was manually set
+  var apEl2=document.getElementById('f-ap');
+  if(apEl2&&e.approved){
+    var expectedAp=e.negotiated||e.quote||'';
+    if(String(e.approved)!==String(expectedAp)){
+      apEl2.setAttribute('data-manual-ap','1');
+    }
+  }
+  toggleSec();toggleType();
+  if(e.hours)calcIH();
+  if(e.vendorINR)calcOS();
+  calcApp();
+  document.getElementById('m-enq').classList.add('open');
+}
+
+function clearF(){
+  ['f-nm','f-em','f-ph','f-co','f-cn','f-mg','f-qa','f-ng','f-ap','f-qr','f-tl','f-dd','f-ra','f-in','f-pl','f-nt','f-hr','f-dy','f-vi','f-vt'].forEach(function(id){var el=document.getElementById(id);if(el){el.value='';el.removeAttribute('data-auto');el.removeAttribute('data-manual-ap');}});
+  ['f-tr','f-dp','f-wt','f-as','f-ty','f-vs','f-rp','f-rs','f-is'].forEach(function(id){var el=document.getElementById(id);if(el)el.selectedIndex=0;});
+  var stEl=document.getElementById('f-st');if(stEl)stEl.value='New Lead';
+  var cuEl=document.getElementById('f-cu');if(cuEl)cuEl.value='USD';
+  var amEl=document.getElementById('f-am');if(amEl)amEl.value='No';
+  var lsEl=document.getElementById('f-ls');if(lsEl)lsEl.value='Website Enquiry';
+  var vl=document.getElementById('vinv-list');if(vl)vl.innerHTML='';
+  ['s-ih','s-os','s-qt','s-dl'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+  var hintEl=document.getElementById('ap-hint');if(hintEl)hintEl.style.display='none';
+  var cih=document.getElementById('c-ih');if(cih)cih.textContent='Enter hours above';
+  var cos=document.getElementById('c-os');if(cos)cos.textContent='Enter vendor cost above';
+}
+
+function toggleSec(){
+  var s=document.getElementById('f-st').value;
+  var qStages=['Quote Sent','Quote Approved','Quote Rejected','Negotiating'];
+  var sqEl=document.getElementById('s-qt');
+  if(sqEl)sqEl.style.display=qStages.includes(s)?'block':'none';
+  var sdEl=document.getElementById('s-dl');
+  if(sdEl)sdEl.style.display=s==='Quote Approved'?'block':'none';
+  if(s==='Quote Approved')calcRet();
+}
+
+function toggleType(){
+  var t=document.getElementById('f-ty').value;
+  var ihEl=document.getElementById('s-ih');if(ihEl)ihEl.style.display=t==='Inhouse'?'block':'none';
+  var osEl=document.getElementById('s-os');if(osEl)osEl.style.display=t==='Outsource'?'block':'none';
+}
+
+// ============================================================
+// CALCULATIONS
+// ============================================================
+function calcIH(){
+  var hEl=document.getElementById('f-hr'),dEl=document.getElementById('f-dy');
+  if(!hEl)return;
+  var hrs=Number(hEl.value||0);
+  var cur=(document.getElementById('f-cu')||{}).value||'USD';
+  var rate=DB.hourlyRate||25;
+  var usd=hrs*rate;
+  var conv=toLocalCur(usd,cur);
+  var s=sym(cur);
+  var ihEl=document.getElementById('c-ih');
+  if(ihEl)ihEl.textContent=hrs>0?s+Math.round(conv)+' ('+hrs+' hrs x $'+rate+')':'Enter hours above';
+  if(hrs>0&&dEl&&!dEl.value){
+    var hintDays=Math.ceil(hrs/8);
+    dEl.placeholder='e.g. '+hintDays+' days ('+hrs+'hrs / 8hrs per resource)';
+  }
+  if(hrs>0){
+    var qEl=document.getElementById('f-qa');
+    if(qEl){
+      if(!qEl.value||qEl.getAttribute('data-auto')==='1'){
+        qEl.value=Math.round(conv);
+        qEl.setAttribute('data-auto','1');
+      }
+      calcApp();
+    }
+  }
+}
+
+function calcOS(){
+  var viEl=document.getElementById('f-vi');if(!viEl)return;
+  var inr=Number(viEl.value||0);
+  var cur=(document.getElementById('f-cu')||{}).value||'USD';
+  var markup=DB.osMarkupRate||22,divisor=DB.osDivisor||925;
+  var usd=(inr/divisor)*markup;
+  var conv=toLocalCur(usd,cur);
+  var s=sym(cur);
+  var osEl=document.getElementById('c-os');
+  if(osEl)osEl.textContent=inr>0?s+Math.round(conv)+' ((INR '+Number(inr).toLocaleString('en-IN')+' / '+divisor+') x '+markup+')':'Enter vendor cost above';
+  if(inr>0){
+    var qEl=document.getElementById('f-qa');
+    if(qEl){
+      // Only auto-fill if quote is empty or equals the previous auto-calculation
+      // Use data-auto attribute to track if value was auto-set
+      if(!qEl.value||qEl.getAttribute('data-auto')==='1'){
+        qEl.value=Math.round(conv);
+        qEl.setAttribute('data-auto','1');
+      }
+      calcApp();
+    }
+  }
+}
+
+function toLocalCur(usd,cur){
+  var r=DB.rates||{USD:83,AED:22.6,GBP:106};
+  if(cur==='AED')return usd*(r.AED/r.USD);
+  if(cur==='GBP')return usd*(r.GBP/r.USD);
+  return usd;
+}
+
+function calcApp(){
+  var q=(document.getElementById('f-qa')||{}).value||'';
+  var n=(document.getElementById('f-ng')||{}).value||'';
+  var apEl=document.getElementById('f-ap');
+  var hint=document.getElementById('ap-hint');
+  if(apEl&&apEl.getAttribute('data-manual-ap')!=='1'){
+    apEl.value=n||q;
+  }
+  if(hint){
+    if(n&&q&&n!==q){
+      hint.style.display='block';
+      hint.style.background='rgba(245,158,11,.1)';
+      hint.style.color='var(--yel)';
+      hint.textContent='Negotiated: '+n+' used as approved (original quote: '+q+')';
+    }else if(q){
+      hint.style.display='block';
+      hint.style.background='rgba(16,185,129,.1)';
+      hint.style.color='var(--grn)';
+      hint.textContent='Quote amount '+q+' used as approved cost';
+    }else{
+      hint.style.display='none';
+    }
+  }
+  calcRet();
+}
+
+function calcRet(){
+  var rpEl=document.getElementById('f-rp'),raEl=document.getElementById('f-ra');
+  if(!rpEl||!raEl)return;
+  var apEl=document.getElementById('f-ap'),qEl=document.getElementById('f-qa');
+  var approved=Number((apEl?apEl.value:'')|| (qEl?qEl.value:'')||0);
+  var pct=Number(rpEl.value||0);
+  if(approved&&pct)raEl.value=Math.round(approved*pct/100);
+}
+
+function addVRow(d){
+  d=d||{};
+  var list=document.getElementById('vinv-list');if(!list)return;
+  var div=document.createElement('div');
+  div.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:end;padding:6px;background:var(--s2);border-radius:8px;margin-bottom:4px;';
+  div.innerHTML='<div class="fg"><label>Invoice #</label><input type="text" class="vi-n fi" placeholder="VIN-001" value="'+(d.num||'')+'"></div>'
+    +'<div class="fg"><label>Amount (INR)</label><input type="number" class="vi-a fi" placeholder="INR" value="'+(d.amt||'')+'"></div>'
+    +'<div class="fg"><label>Status</label><select class="vi-s fi">'
+    +'<option value="Pending"'+(d.status==='Pending'?' selected':'')+'>Pending</option>'
+    +'<option value="Paid"'+(d.status==='Paid'?' selected':'')+'>Paid</option>'
+    +'<option value="Partially Paid"'+(d.status==='Partially Paid'?' selected':'')+'>Partially Paid</option>'
+    +'</select></div>'
+    +'<div><button onclick="this.parentNode.parentNode.remove()" style="background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25);border-radius:7px;padding:4px 9px;font-size:12px;cursor:pointer;margin-top:18px;">x</button></div>';
+  list.appendChild(div);
+}
+
+function getVI(){
+  var ns=document.querySelectorAll('.vi-n'),as=document.querySelectorAll('.vi-a'),ss=document.querySelectorAll('.vi-s'),r=[];
+  for(var i=0;i<ns.length;i++)if(ns[i].value||as[i].value)r.push({num:ns[i].value,amt:as[i].value,status:ss[i].value});
+  return r;
+}
+
+// ============================================================
+// SAVE ENQUIRY
+// ============================================================
+function saveEnq(){
+  var nm=(document.getElementById('f-nm')||{}).value.trim();
+  var em=(document.getElementById('f-em')||{}).value.trim();
+  if(!nm){showToast('Name is required','err');return;}
+  var zh=eid?DB.enquiries.find(function(x){return x.id===eid;})||{}:{};
+  var obj={
+    id:eid||DB.nextId++,
+    name:nm,email:em,
+    phone:gv('f-ph'),company:gv('f-co'),territory:gv('f-tr'),country:gv('f-cn'),
+    department:gv('f-dp'),workType:gv('f-wt'),
+    date:gv('f-dt')||new Date().toISOString().split('T')[0],
+    source:gv('f-ls')||'Website Enquiry',
+    message:gv('f-mg'),assigned:gv('f-as'),
+    status:gv('f-st'),type:gv('f-ty'),currency:gv('f-cu')||'USD',
+    hours:gv('f-hr'),days:gv('f-dy'),
+    vendorName:gv('f-vd'),vendorINR:gv('f-vi'),vendorTimeline:gv('f-vt'),vendorInvStatus:gv('f-vs'),
+    vendorInvoices:getVI(),
+    quote:gv('f-qa'),negotiated:gv('f-ng'),approved:gv('f-ap'),quoteRef:gv('f-qr'),
+    timeline:gv('f-tl'),delivery:gv('f-dd'),
+    retainerPct:gv('f-rp'),retainerAmt:gv('f-ra'),retainerStatus:gv('f-rs'),approvalMail:gv('f-am'),
+    invoiceNo:gv('f-in'),invoiceStatus:gv('f-is'),payLink:gv('f-pl'),notes:gv('f-nt'),
+    zohoStatus:zh.zohoStatus||'',zohoBalance:zh.zohoBalance!==undefined?zh.zohoBalance:'',
+    zohoDueDate:zh.zohoDueDate||'',zohoLastSync:zh.zohoLastSync||'',zohoInvId:zh.zohoInvId||''
+  };
+  if(eid){
+    var idx=DB.enquiries.findIndex(function(x){return x.id===eid;});
+    if(idx!==-1)DB.enquiries[idx]=obj;
+    showToast('Updated \u2713','ok');
+  }else{
+    DB.enquiries.push(obj);
+    showToast('Enquiry added \u2713','ok');
+  }
+  saveDB();
+  document.getElementById('m-enq').classList.remove('open');
+  renderAll();renderDash();
+  // Sync to Excel if connected
+  if(msIsConnected())xlWrite(obj).catch(function(){});
+}
+
+function delE(id){
+  if(!confirm('Delete this enquiry?'))return;
+  if(msIsConnected())xlDeleteRow(id).catch(function(){});
+  DB.enquiries=DB.enquiries.filter(function(e){return e.id!==id;});
+  saveDB();renderAll();renderDash();showToast('Deleted','err');
+}
+
+// ============================================================
+// EMAIL PARSER
+// ============================================================
+function openParse(){
+  pd={};document.getElementById('pc').classList.remove('show');
+  document.getElementById('btn-up').style.display='none';
+  document.getElementById('pi').value='';
+  document.getElementById('m-parse').classList.add('open');
+}
+function doParseEmail(){
+  var raw=document.getElementById('pi').value;if(!raw.trim()){showToast('Paste email content','err');return;}
+  function ex(label){var m=raw.match(new RegExp(label+'\\s*:\\s*(.+)','i'));return m?m[1].trim().replace(/<[^>]+>/g,''):'';}
+  var msgM=raw.match(/Message\s*:\s*([\s\S]+?)(?:\n\n|$)/i);
+  var dtM=raw.match(/(?:Sent|Date)\s*:\s*([^\n\r<]+)/i);
+  pd={name:ex('Name'),email:ex('Email'),phone:ex('Phone'),company:ex('Company'),
+    territory:ex('Territory'),country:ex('Country'),department:ex('Department'),
+    message:msgM?msgM[1].trim():'',
+    date:dtM?parseDt(dtM[1].trim()):new Date().toISOString().split('T')[0],
+    status:'New Lead',source:'Website Enquiry'};
+  var card=document.getElementById('pc');
+  var rows='';
+  Object.keys(pd).forEach(function(k){if(pd[k])rows+='<div class="pr"><span style="color:var(--t2)">'+k+'</span><span>'+pd[k]+'</span></div>';});
+  card.innerHTML='<div style="font-size:12px;font-weight:700;color:var(--grn);margin-bottom:8px;">\u2713 Fields Extracted</div>'+rows;
+  card.classList.add('show');
+  document.getElementById('btn-up').style.display='inline-flex';
+  showToast('Parsed \u2713','ok');
+}
+function parseDt(s){
+  var d=new Date(s);if(!isNaN(d))return d.toISOString().split('T')[0];
+  var mo={january:0,february:1,march:2,april:3,may:4,june:5,july:6,august:7,september:8,october:9,november:10,december:11};
+  var m=s.match(/(\d+)\s+(\w+)\s+(\d{4})/i);
+  if(m)return new Date(m[3],mo[m[2].toLowerCase()],m[1]).toISOString().split('T')[0];
+  return new Date().toISOString().split('T')[0];
+}
+function useParsed(){
+  closeM('m-parse');popSels();eid=null;clearF();
+  var fm={'f-nm':'name','f-em':'email','f-ph':'phone','f-co':'company','f-tr':'territory','f-cn':'country','f-dp':'department','f-dt':'date','f-mg':'message','f-ls':'source'};
+  Object.keys(fm).forEach(function(id){var el=document.getElementById(id);if(el&&pd[fm[id]])el.value=pd[fm[id]];});
+  document.getElementById('m-title').textContent='New Enquiry (from Email)';
+  toggleSec();toggleType();
+  document.getElementById('m-enq').classList.add('open');
+}
+
+// ============================================================
+// SETTINGS
+// ============================================================
+function renderSettings(){
+  // Populate MS credential fields (show masked if already saved)
+  var cidEl = document.getElementById('ms-cid');
+  var tidEl = document.getElementById('ms-tid');
+  var savedCid = localStorage.getItem('ms_client_id')||'';
+  var savedTid = localStorage.getItem('ms_tenant_id')||'';
+  if(cidEl && savedCid) cidEl.placeholder = savedCid.substr(0,8)+'... (saved)';
+  if(tidEl && savedTid) tidEl.placeholder = savedTid.substr(0,8)+'... (saved)';
+  var st=document.getElementById('st-s');
+  if(st)st.innerHTML=DB.salesTeam.map(function(s){return '<span class="tag">'+s+'<span class="tdl" onclick="rmS(\''+s.replace(/'/g,"\\'")+'\')">&#x2715;</span></span>';}).join('')||'<span style="color:var(--t3);font-size:12px">None</span>';
+  var dt=document.getElementById('st-d');
+  if(dt)dt.innerHTML=DB.departments.map(function(d){return '<span class="tag">'+d+'<span class="tdl" onclick="rmD(\''+d.replace(/'/g,"\\'")+'\')">&#x2715;</span></span>';}).join('');
+  var vt=document.getElementById('st-v');
+  if(vt)vt.innerHTML=(DB.vendors||[]).map(function(v){return '<span class="tag">'+v+'<span class="tdl" onclick="rmV(\''+v.replace(/'/g,"\\'")+'\')">&#x2715;</span></span>';}).join('')||'<span style="color:var(--t3);font-size:12px">None</span>';
+  var r=DB.rates||{USD:83,AED:22.6,GBP:106};
+  var f={'r-hr':DB.hourlyRate||25,'r-os':DB.osMarkupRate||22,'r-div':DB.osDivisor||925,'r-usd':r.USD,'r-aed':r.AED,'r-gbp':r.GBP};
+  Object.keys(f).forEach(function(id){var el=document.getElementById(id);if(el)el.value=f[id];});
+  var hd=document.getElementById('r-hr-disp');if(hd)hd.textContent='$'+(DB.hourlyRate||25)+'/hr';
+  var dd=document.getElementById('r-div-disp');if(dd)dd.textContent=DB.osDivisor||925;
+  renderWHUrl();
+}
+function addS(){var v=(document.getElementById('inp-s')||{}).value.trim();if(!v||DB.salesTeam.includes(v))return;DB.salesTeam.push(v);document.getElementById('inp-s').value='';saveDB();renderSettings();popSels();}
+function rmS(n){DB.salesTeam=DB.salesTeam.filter(function(s){return s!==n;});saveDB();renderSettings();popSels();}
+function addD(){var v=(document.getElementById('inp-d')||{}).value.trim();if(!v||DB.departments.includes(v))return;DB.departments.push(v);document.getElementById('inp-d').value='';saveDB();renderSettings();popSels();}
+function rmD(d){DB.departments=DB.departments.filter(function(x){return x!==d;});saveDB();renderSettings();}
+function addV(){var v=(document.getElementById('inp-v')||{}).value.trim();if(!v)return;if(!DB.vendors)DB.vendors=[];if(!DB.vendors.includes(v))DB.vendors.push(v);document.getElementById('inp-v').value='';saveDB();renderSettings();popSels();}
+function rmV(v){DB.vendors=(DB.vendors||[]).filter(function(x){return x!==v;});saveDB();renderSettings();popSels();}
+function saveRates(){
+  if(!DB.rates)DB.rates={USD:83,AED:22.6,GBP:106};
+  var f={'r-usd':'USD','r-aed':'AED','r-gbp':'GBP'};
+  Object.keys(f).forEach(function(id){var el=document.getElementById(id);if(el&&el.value)DB.rates[f[id]]=Number(el.value)||DB.rates[f[id]];});
+  var hrEl=document.getElementById('r-hr');if(hrEl&&hrEl.value)DB.hourlyRate=Number(hrEl.value)||25;
+  var osEl=document.getElementById('r-os');if(osEl&&osEl.value)DB.osMarkupRate=Number(osEl.value)||22;
+  var dvEl=document.getElementById('r-div');if(dvEl&&dvEl.value)DB.osDivisor=Number(dvEl.value)||925;
+  saveDB();renderSettings();showToast('Rates saved \u2713','ok');
+}
+function clearAll(){if(!confirm('Delete ALL data?'))return;DB.enquiries=[];DB.nextId=1;saveDB();renderAll();renderDash();showToast('Cleared','err');}
+function exportCSV(){
+  var h=['ID','Date','Name','Email','Phone','Company','Territory','Country','Department','WorkType','Assigned','Status','Type','Currency','Hours','Days','VendorName','VendorINR','Quote','Negotiated','Approved','Timeline','Delivery','RetPct','RetAmt','RetStatus','InvoiceNo','InvoiceStatus','Notes'];
+  var rows=DB.enquiries.map(function(e){return [e.id,e.date,e.name,e.email,e.phone,e.company,e.territory,e.country,e.department,e.workType,e.assigned,e.status,e.type,e.currency,e.hours,e.days,e.vendorName,e.vendorINR,e.quote,e.negotiated,e.approved,e.timeline,e.delivery,e.retainerPct,e.retainerAmt,e.retainerStatus,e.invoiceNo,e.invoiceStatus,'"'+(e.notes||'').replace(/"/g,'""')+'"'].join(',');});
+  var csv=[h.join(',')].concat(rows).join('\n');
+  var a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='EnquiryDesk_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
+  showToast('CSV exported \u2713','ok');
+}
+
+// ============================================================
+// WEBHOOK
+// ============================================================
+function initWH(){
+  whs=localStorage.getItem('wh_s2');
+  if(!whs){whs=Array.from(crypto.getRandomValues(new Uint8Array(16))).map(function(b){return b.toString(16).padStart(2,'0');}).join('');localStorage.setItem('wh_s2',whs);}
+  renderWHUrl();setInterval(pollWH,3000);
+}
+function renderWHUrl(){
+  var el=document.getElementById('wh-url');
+  if(el){var base=window.location.href.split('?')[0].replace('index.html','');el.textContent=base+'webhook.html?secret='+whs;}
+}
+function copyWH(){navigator.clipboard.writeText((document.getElementById('wh-url')||{}).textContent||'').then(function(){showToast('Copied \u2713','ok');});}
+function regenWH(){if(!confirm('Regenerate? Update in Make.com too.'))return;whs=Array.from(crypto.getRandomValues(new Uint8Array(16))).map(function(b){return b.toString(16).padStart(2,'0');}).join('');localStorage.setItem('wh_s2',whs);renderWHUrl();showToast('New URL \u2713','ok');}
+function pollWH(){
+  // Check localStorage queue (webhook.html writes here)
+  var keys=['wh_pending','webhook_pending_leads'];
+  keys.forEach(function(key){
+    var p=localStorage.getItem(key);if(!p)return;
+    try{
+      var leads=JSON.parse(p);
+      if(Array.isArray(leads)&&leads.length>0){leads.forEach(procLead);localStorage.removeItem(key);}
+    }catch(e){localStorage.removeItem(key);}
+  });
+}
+function procLead(data){
+  if(!data||!data.name)return;
+  // Accept if: no secret in payload (Zoho CRM may not send it),
+  // OR secret matches wh_s2 OR wh_s1 OR webhook_secret_v1
+  if(data.secret){
+    var validSecrets=[whs,localStorage.getItem('wh_s1'),localStorage.getItem('webhook_secret_v1')].filter(Boolean);
+    if(validSecrets.length>0&&!validSecrets.includes(data.secret))return;
+  }
+  // Deduplicate: same email within last 60 seconds
+  var now=Date.now();
+  var exists=DB.enquiries.find(function(e){
+    return e.email===data.email&&e.source==='Website Enquiry'&&(now-new Date(e.date).getTime())<60000;
+  });
+  if(exists)return;
+  var lead={id:DB.nextId++,name:data.name||'',email:data.email||'',phone:data.phone||'',company:data.company||'',territory:data.territory||'',country:data.country||'',department:data.department||'',workType:'',date:data.date||new Date().toISOString().split('T')[0],status:'New Lead',source:'Website Enquiry',message:data.message||'',assigned:resolveA(data.assigned),type:'',currency:'USD',hours:'',days:'',vendorName:'',vendorINR:'',vendorTimeline:'',vendorInvStatus:'',vendorInvoices:[],quote:'',negotiated:'',approved:'',quoteRef:'',timeline:'',delivery:'',retainerPct:'',retainerAmt:'',retainerStatus:'',approvalMail:'No',invoiceNo:'',invoiceStatus:'',payLink:'',notes:'',zohoStatus:'',zohoBalance:'',zohoDueDate:'',zohoLastSync:'',zohoInvId:''};
+  DB.enquiries.unshift(lead);saveDB();renderAll();renderDash();
+  showToast('New lead: '+lead.name,'ok');
+}
+function resolveA(v){if(!v)return'';var s=String(v).toLowerCase();var m=DB.salesTeam.find(function(sp){return s.indexOf(sp.toLowerCase())>=0||sp.toLowerCase().indexOf(s.split('@')[0])>=0;});return m||v;}
+function injectTest(){procLead({secret:whs,name:'Test Lead - Make.com',email:'test@makeauto.com',phone:'+1 555 000 0000',company:'Test Corp',territory:'North America',country:'United States',department:'Land Surveying',message:'Test lead from Make.com.',assigned:DB.salesTeam[0]||'',date:new Date().toISOString().split('T')[0]});navTo('leads');}
+
+// ============================================================
+// ZOHO
+// ============================================================
+var ZHB='https://books.zoho.com/api/v3';
+function loadZH(){
+  var s=localStorage.getItem('zh_v3');if(s){try{zhT=JSON.parse(s);}catch(e){}}
+  var m={'zh-cid':'cid','zh-cs':'cs','zh-org':'org','zh-at':'at','zh-rt':'rt'};
+  Object.keys(m).forEach(function(id){var el=document.getElementById(id);if(el&&zhT[m[id]])el.value=zhT[m[id]];});
+  zhBadge();
+}
+function zhSv(){localStorage.setItem('zh_v3',JSON.stringify(zhT));}
+function zhSave(){
+  var at=(document.getElementById('zh-at')||{}).value.trim();
+  var rt=(document.getElementById('zh-rt')||{}).value.trim();
+  var org=(document.getElementById('zh-org')||{}).value.trim();
+  var cid=(document.getElementById('zh-cid')||{}).value.trim();
+  var cs=(document.getElementById('zh-cs')||{}).value.trim();
+  if(!at||!org){zhSt('Access Token and Org ID required','err');return;}
+  zhT={at:at,rt:rt,org:org,cid:cid,cs:cs,savedAt:Date.now()};
+  zhSv();zhBadge();zhSt('\u2713 Saved. Click Test to verify.','ok');showToast('Zoho connected \u2713','ok');
+}
+async function zhTest(){
+  if(!zhT.at){zhSt('Paste Access Token first','err');return;}
+  var btn=document.getElementById('zh-tb');btn.textContent='\u23F3';btn.disabled=true;
+  try{var d=await zhGet('organizations');var org=d.organizations&&(d.organizations.find(function(o){return o.organization_id==zhT.org;})||d.organizations[0]);
+    if(org){zhSt('\u2713 Connected to "'+org.name+'"','ok');showToast('Zoho OK \u2713','ok');}
+    else zhSt('Connected but org not found','err');
+  }catch(err){zhSt('\u2715 '+err.message,'err');}
+  btn.textContent='\uD83D\uDD0E Test Connection';btn.disabled=false;
+}
+function zhDisc(){if(!confirm('Disconnect Zoho?'))return;zhT={at:'',rt:'',org:'',cid:'',cs:'',savedAt:0};zhSv();zhBadge();showToast('Disconnected','err');}
+function zhBadge(){
+  var conn=!!(zhT.at&&zhT.org);
+  var hb=document.getElementById('zh-badge');
+  if(hb){hb.className=conn?'zhconn':'zhdisc';hb.innerHTML=conn?'\u2713 Zoho Connected':'\u26A1 Connect Zoho';hb.onclick=conn?null:function(){navTo('zoho');};}
+  var vb=document.getElementById('zh-vs');if(vb)vb.innerHTML=conn?'<div class="zhconn">\u2713 Active</div>':'<div class="zhdisc">Not connected</div>';
+  var cb=document.getElementById('zh-banner');
+  if(cb){cb.style.display=conn?'flex':'none';if(conn&&zhT.savedAt){var mins=Math.round((Date.now()-zhT.savedAt)/60000);var el=document.getElementById('zh-exp');if(el)el.textContent=mins<60?'Token saved '+mins+' min ago':'Saved '+mins+' min ago \u2014 may be expired';}}
+  var ts=document.getElementById('zh-ts');if(ts)ts.textContent='';
+}
+function zhSt(msg,type){var el=document.getElementById('zh-ts');if(el){el.className=type==='ok'?'tok-ok':'tok-err';el.textContent=msg;}}
+async function zhGet(ep){
+  if(!zhT.at)throw new Error('Not connected');
+  var sep=ep.indexOf('?')>=0?'&':'?';
+  var orgP=ep.indexOf('organizations')===0?'':sep+'organization_id='+zhT.org;
+  var r=await fetch(ZHB+'/'+ep+orgP,{headers:{Authorization:'Zoho-oauthtoken '+zhT.at}});
+  if(r.status===401)throw new Error('Token expired \u2014 refresh in Postman and paste new token');
+  if(!r.ok){var b=await r.text();throw new Error('Zoho API '+r.status+': '+b.slice(0,100));}
+  return r.json();
+}
+async function zhLookup(){
+  var inp=(document.getElementById('zh-li')||{}).value.trim();
+  if(!inp||!zhT.at){showToast(zhT.at?'Enter invoice number':'Connect Zoho first','err');return;}
+  var btn=document.querySelector('[onclick="zhLookup()"]');if(btn){btn.textContent='\u23F3';btn.disabled=true;}
+  try{
+    var term=inp;
+    if(inp.indexOf('http')===0){try{var u=new URL(inp);term=u.searchParams.get('CInvoiceID')||u.searchParams.get('invoice_number')||inp;}catch(e){}}
+    var inv=null;
+    try{var d=await zhGet('invoices?invoice_number='+encodeURIComponent(term)+'&status=all');inv=d.invoices&&d.invoices[0];}catch(e){}
+    if(!inv&&/^\d+$/.test(term)){try{var d2=await zhGet('invoices/'+term);inv=d2.invoice;}catch(e){}}
+    if(!inv){showToast('Invoice not found','err');if(btn){btn.textContent='\uD83D\uDD0E Fetch';btn.disabled=false;}return;}
+    try{var f=await zhGet('invoices/'+inv.invoice_id);if(f.invoice)inv=f.invoice;}catch(e){}
+    lastInv=inv;zhRenderCard(inv);showToast('Fetched \u2713','ok');
+  }catch(err){showToast('Error: '+err.message,'err');}
+  if(btn){btn.textContent='\uD83D\uDD0E Fetch';btn.disabled=false;}
+}
+function zhRenderCard(inv){
+  var card=document.getElementById('zh-rc');
+  var sMap={paid:'bpaid',unpaid:'bpd',overdue:'bovd',draft:'bnw',sent:'bqs'};
+  var rb=document.getElementById('zh-rb');if(rb)rb.innerHTML='<span class="badge '+(sMap[inv.status]||'bnw')+'">'+((inv.status||'').toUpperCase())+'</span>';
+  var cur=inv.currency_symbol||'$';
+  var balColor=inv.status==='paid'?'var(--grn)':'var(--yel)';
+  document.getElementById('zh-rg2').innerHTML=
+    '<div class="zi-r"><div class="zi-l">Invoice #</div><div class="zi-v">'+(inv.invoice_number||'&mdash;')+'</div></div>'
+    +'<div class="zi-r"><div class="zi-l">Customer</div><div class="zi-v">'+(inv.customer_name||'&mdash;')+'</div></div>'
+    +'<div class="zi-r"><div class="zi-l">Invoice Date</div><div class="zi-v">'+(inv.date||'&mdash;')+'</div></div>'
+    +'<div class="zi-r"><div class="zi-l">Due Date</div><div class="zi-v">'+(inv.due_date||'&mdash;')+'</div></div>'
+    +'<div class="zi-r"><div class="zi-l">Total</div><div class="zi-v big">'+cur+Number(inv.total||0).toLocaleString()+'</div></div>'
+    +'<div class="zi-r"><div class="zi-l">Balance</div><div class="zi-v" style="color:'+balColor+'">'+cur+Number(inv.balance||0).toLocaleString()+'</div></div>';
+  var sel=document.getElementById('zh-le');
+  sel.innerHTML='<option value="">&mdash; Link to enquiry &mdash;</option>'+DB.enquiries.map(function(e){return '<option value="'+e.id+'">'+e.name+' &mdash; '+(e.invoiceNo||'No inv#')+'</option>';}).join('');
+  var match=DB.enquiries.find(function(e){return e.invoiceNo===inv.invoice_number;});
+  if(match)sel.value=match.id;
+  card.classList.add('show');
+}
+function zhApply(){
+  if(!lastInv)return;
+  var id=parseInt((document.getElementById('zh-le')||{}).value);
+  if(!id){showToast('Select an enquiry','err');return;}
+  var sMap={paid:'Paid',unpaid:'Pending',overdue:'Overdue',sent:'Sent',draft:'Pending'};
+  var idx=DB.enquiries.findIndex(function(e){return e.id===id;});if(idx===-1)return;
+  var inv=lastInv;
+  DB.enquiries[idx]=Object.assign({},DB.enquiries[idx],{invoiceNo:inv.invoice_number||DB.enquiries[idx].invoiceNo,invoiceStatus:sMap[inv.status]||DB.enquiries[idx].invoiceStatus,zohoStatus:inv.status,zohoBalance:inv.balance,zohoDueDate:inv.due_date,zohoInvId:inv.invoice_id,zohoLastSync:new Date().toISOString()});
+  saveDB();renderAll();showToast('Applied \u2713','ok');
+}
+async function zhBulk(){
+  if(!zhT.at){showToast('Connect Zoho first','err');return;}
+  var btn=document.getElementById('zh-bb');btn.textContent='\u23F3 Syncing...';btn.disabled=true;
+  document.getElementById('zh-bs').textContent='Fetching...';
+  try{
+    var d=await zhGet('invoices?status=all&per_page=200');
+    var invs=d.invoices||[];var sMap={paid:'Paid',unpaid:'Pending',overdue:'Overdue',sent:'Sent',draft:'Pending'};var upd=0;
+    invs.forEach(function(inv){
+      var idx=DB.enquiries.findIndex(function(e){return e.invoiceNo===inv.invoice_number||(e.zohoInvId&&e.zohoInvId===inv.invoice_id);});
+      if(idx!==-1){DB.enquiries[idx]=Object.assign({},DB.enquiries[idx],{invoiceStatus:sMap[inv.status]||DB.enquiries[idx].invoiceStatus,zohoStatus:inv.status,zohoBalance:inv.balance,zohoDueDate:inv.due_date,zohoLastSync:new Date().toISOString()});upd++;}
+    });
+    saveDB();renderAll();
+    document.getElementById('zh-bs').textContent='\u2713 '+invs.length+' invoices, '+upd+' updated';
+    document.getElementById('zh-br').innerHTML='<div class="ibox"><strong>Sync complete.</strong> '+invs.length+' invoices fetched. '+upd+' rows updated.</div>';
+    showToast(upd+' invoices synced \u2713','ok');
+  }catch(err){showToast('Sync error: '+err.message,'err');document.getElementById('zh-bs').textContent='Error: '+err.message;}
+  btn.textContent='\u26A1 Sync All';btn.disabled=false;
+}
+async function zhSyncRow(id){
+  if(!zhT.at){showToast('Connect Zoho first','err');return;}
+  var e=DB.enquiries.find(function(x){return x.id===id;});
+  if(!e||!e.invoiceNo){showToast('No invoice number','err');return;}
+  try{
+    var d=await zhGet('invoices?invoice_number='+encodeURIComponent(e.invoiceNo)+'&status=all');
+    var inv=d.invoices&&d.invoices[0];if(!inv){showToast('Not found in Zoho','err');return;}
+    var sMap={paid:'Paid',unpaid:'Pending',overdue:'Overdue',sent:'Sent',draft:'Pending'};
+    var idx=DB.enquiries.findIndex(function(x){return x.id===id;});
+    DB.enquiries[idx]=Object.assign({},DB.enquiries[idx],{invoiceStatus:sMap[inv.status]||e.invoiceStatus,zohoStatus:inv.status,zohoBalance:inv.balance,zohoDueDate:inv.due_date,zohoLastSync:new Date().toISOString()});
+    saveDB();renderTbl('inv');showToast('Synced \u2713','ok');
+  }catch(err){showToast('Sync error: '+err.message,'err');}
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function fmtD(d){if(!d)return'&mdash;';return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
+function sb(s){var m={'New Lead':'bnw','Sales Reached Out':'brc','RFI Sent':'brf','Quote Sent':'bqs','Quote Approved':'bqa','Quote Rejected':'bqr','Negotiating':'bng'};return '<span class="badge '+(m[s]||'bnw')+'">'+(s||'New Lead')+'</span>';}
+function tb(t){if(!t)return'&mdash;';return '<span class="badge '+(t==='Inhouse'?'bih':'bos')+'">'+t+'</span>';}
+function ib(s){if(!s)return'&mdash;';var m={Pending:'bpd',Sent:'bst',Paid:'bpaid',Overdue:'bovd','Partially Paid':'bprt'};return '<span class="badge '+(m[s]||'')+'">'+s+'</span>';}
+function rb(s){if(!s)return'&mdash;';var m={'Not Raised':'bpd',Sent:'bst',Paid:'bpaid'};return '<span class="badge '+(m[s]||'')+'">'+s+'</span>';}
+function closeM(id){var el=document.getElementById(id);if(el)el.classList.remove('open');}
+function showToast(msg,type){var t=document.getElementById('toast');t.innerHTML=msg;t.className='toast '+(type||'ok')+' show';setTimeout(function(){t.classList.remove('show');},3500);}
+function updateBadges(){
+  var nb=document.getElementById('nb-all');if(nb)nb.textContent=DB.enquiries.length;
+  var nn=document.getElementById('nb-new');if(nn)nn.textContent=DB.enquiries.filter(function(e){return e.status==='New Lead'||e.status==='Sales Reached Out';}).length;
+  var due=DB.enquiries.filter(function(e){return e.delivery===new Date().toISOString().split('T')[0];}).length;
+  var nd=document.getElementById('nb-due');if(nd){nd.textContent=due;nd.style.display=due>0?'inline-flex':'none';}
+}
+document.querySelectorAll('.overlay').forEach(function(o){o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('open');});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(function(m){m.classList.remove('open');});});
+
+// ============================================================
+// MICROSOFT GRAPH / EXCEL INTEGRATION
+// ============================================================
+
+function msLoadToken(){
+  var s=localStorage.getItem('ms_token');
+  if(s){try{msToken=JSON.parse(s);}catch(e){}}
+  var fi=localStorage.getItem('ms_file_id');
+  if(fi)excelFileId=fi;
+}
+function msSaveToken(){
+  localStorage.setItem('ms_token',JSON.stringify(msToken));
+  if(excelFileId)localStorage.setItem('ms_file_id',excelFileId);
+}
+function msIsConnected(){
+  return !!(msToken.access&&msToken.expiry>Date.now());
+}
+
+// ── OAuth login via popup ──────────────────────────────────────────
+async function msLogin(){
+  if(!MS_CLIENT_ID||!MS_TENANT_ID){
+    showToast('Enter Client ID and Tenant ID in Settings first','err');
+    navTo('settings');return;
+  }
+  var state=Math.random().toString(36).substr(2);
+  localStorage.setItem('ms_state',state);
+  // Generate PKCE code verifier and challenge
+  var verifier=Array.from(crypto.getRandomValues(new Uint8Array(32)))
+    .map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  localStorage.setItem('ms_verifier',verifier);
+  var encoder=new TextEncoder();
+  var data=encoder.encode(verifier);
+  var hash=await crypto.subtle.digest('SHA-256',data);
+  var challenge=btoa(String.fromCharCode.apply(null,new Uint8Array(hash)))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  var params=new URLSearchParams({
+    client_id:MS_CLIENT_ID,
+    response_type:'code',
+    redirect_uri:MS_REDIRECT,
+    scope:MS_SCOPES,
+    state:state,
+    response_mode:'query',
+    code_challenge:challenge,
+    code_challenge_method:'S256',
+    prompt:'select_account'
+  });
+  window.location.href=MS_AUTH_URL+'?'+params.toString();
+}
+
+async function msHandleCallback(){
+  var params=new URLSearchParams(window.location.search);
+  var code=params.get('code');
+  var state=params.get('state');
+  var error=params.get('error');
+  if(error){showToast('MS Auth error: '+params.get('error_description'),'err');return;}
+  if(!code)return;
+  if(state&&state!==localStorage.getItem('ms_state')){showToast('State mismatch — retry','err');return;}
+  // PKCE token exchange - works directly from browser, no server needed
+  var verifier=localStorage.getItem('ms_verifier')||'';
+  try{
+    var body=new URLSearchParams({
+      client_id:MS_CLIENT_ID,
+      grant_type:'authorization_code',
+      code:code,
+      redirect_uri:MS_REDIRECT,
+      code_verifier:verifier,
+      scope:MS_SCOPES
+    });
+    var resp=await fetch(MS_TOKEN_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:body.toString()
+    });
+    var data=await resp.json();
+    if(data.access_token){
+      msToken={
+        access:data.access_token,
+        refresh:data.refresh_token||'',
+        expiry:Date.now()+(data.expires_in||3600)*1000
+      };
+      msSaveToken();
+      window.history.replaceState({},'',window.location.pathname);
+      showToast('Microsoft Excel connected ✓','ok');
+      msBadge();
+      await msEnsureFile();
+    }else{
+      showToast('Token error: '+(data.error_description||JSON.stringify(data)),'err');
+    }
+  }catch(err){showToast('Token exchange failed: '+err.message,'err');}
+}
+
+async function msRefreshToken(){
+  if(!msToken.refresh)return false;
+  try{
+    var body=new URLSearchParams({
+      client_id:MS_CLIENT_ID,
+      grant_type:'refresh_token',
+      refresh_token:msToken.refresh,
+      scope:MS_SCOPES
+    });
+    var resp=await fetch(MS_TOKEN_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:body.toString()
+    });
+    var data=await resp.json();
+    if(data.access_token){
+      msToken.access=data.access_token;
+      msToken.expiry=Date.now()+(data.expires_in||3600)*1000;
+      if(data.refresh_token)msToken.refresh=data.refresh_token;
+      msSaveToken();return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+async function msGraphCall(method,endpoint,body){
+  if(msToken.expiry<Date.now()+60000){
+    var ok=await msRefreshToken();
+    if(!ok){showToast('Microsoft session expired. Please reconnect.','err');return null;}
+  }
+  var opts={method:method,headers:{Authorization:'Bearer '+msToken.access,'Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  var r=await fetch(GRAPH+endpoint,opts);
+  if(r.status===401){var ok=await msRefreshToken();if(!ok)return null;opts.headers.Authorization='Bearer '+msToken.access;r=await fetch(GRAPH+endpoint,opts);}
+  if(r.status===204)return{};
+  return r.json();
+}
+
+// ── Ensure Excel file exists on OneDrive ──────────────────────────
+async function msEnsureFile(){
+  if(excelFileId){return true;}
+  try{
+    var check=await msGraphCall('GET','/me/drive/root:/'+EXCEL_FILE);
+    if(check&&check.id){
+      excelFileId=check.id;msSaveToken();
+      showToast('Excel file found ✓','ok');
+      return true;
+    }
+  }catch(e){}
+  // Create valid XLSX file with headers
+  try{
+    showToast('Creating Excel file on OneDrive...','ok');
+    var xlsxB64='UEsDBBQAAAAIAKw0d1w+1ydFGwEAAEMDAAATAAAAW0NvbnRlbnRfVHlwZXNdLnhtbK1TS08CMRC+8yuaXgkteDDG7MLBx1FNxB8wtrNsQ1/pFGT/vd3FV4wgB06T5ntmMq0WO2fZFhOZ4Gs+E1PO0KugjV/V/GV5P7nijDJ4DTZ4rHmHxBfzUbXsIhIrYk81b3OO11KSatEBiRDRF6QJyUEuz7SSEdQaVigvptNLqYLP6PMk9x58PmKsusUGNjazu11B9l0SWuLsZs/t42oOMVqjIBdcbr3+FTT5CBFFOXCoNZHGhcDloZAePJzxLX0sK0pGI3uClB/AFaLcWfkW0vo1hLU47vNH19A0RqEOauOKRFBMCJpaxOysGKZwYPz4pAoDn+QwZmfu8uX/fxVqIaF+zqkcD519JT+8T6iSO4tn7zCYfoZXcvgD83dQSwMEFAAAAAgArDR3XF2H9C60AAAALAEAAAsAAABfcmVscy8ucmVsc43Pvw6CMBAG8J2naG6XgoMxhsJiTFgNPkAtx59Qek1bFd7ejmIcHC933+/yFdUya/ZE50cyAvI0A4ZGUTuaXsCtueyOwHyQppWaDApY0UNVJsUVtQwx44fRehYR4wUMIdgT514NOEufkkUTNx25WYY4up5bqSbZI99n2YG7TwPKhLENy+pWgKvbHFizWvyHp64bFZ5JPWY04ceXr4soS9djELBo/iI33YmmNKLAY0e+KVm+AVBLAwQUAAAACACsNHdcKfpuAscAAAA1AQAADwAAAHhsL3dvcmtib29rLnhtbI2Pu27DMAxF93yFwL2R06EoDNtZ2gDZ2w9QLToWYpEOqfTx9yUUpHM58QGei9Ptv/PiPlE0MfWw2zbgkEaOiU49vL8dHp7BaQkUw8KEPfygwn7YdF8s5w/ms7N/0h7mUtbWex1nzEG3vCLZZWLJodgoJ6+rYIg6I5a8+MemefI5JIKN+6vKauU/NJ6mNOILj9eMVG44wSUU89A5rQqDgbsap0PNuA2OQjaPV7pckySzcXV9jGYPTtpkjRzjDnwF+Duh83fl4RdQSwMEFAAAAAgArDR3XCIUUOLbAAAAPwIAABoAAAB4bC9fcmVscy93b3JrYm9vay54bWwucmVsc62RzWrDMAyA730Ko/vipIMxRpxexqDXrXsAYStxaGIbS/vJ288UtjWwsR16EpLQpw+p3b3Pk3qlzGMMBpqqBkXBRjeGwcDz4eHqFhQLBodTDGRgIYZdt2kfaUIpM+zHxKpAAhvwIulOa7aeZuQqJgql08c8o5Q0DzqhPeJAelvXNzqfM6DbKLXCqr0zkPeuAXVYEv0HH/t+tHQf7ctMQX7Yot9iPrInkgLFPJAY+CqxPoWmKlTQv/psL+nDHjO5J8nl4PzttCr/4XN9UR9ZJjoXOeWfBq1e/b37AFBLAwQUAAAACACsNHdcSLvDQnUBAAClBAAAFAAAAHhsL3NoYXJlZFN0cmluZ3MueG1sfZNNT8MwDIbv/Ioqd+gACSHUdhoriEkwjW2AxC1qvTWisUviTvTfEzbxcXC4RMr7yI792snGH7ZNduC8IczV6clIJYAV1Qa3uXpa3x5fqsSzxlq3hJCrAbwaF0eZ95yEUPS5api7qzT1VQNW+xPqAAPZkLOaw9VtU9850LVvANi26dlodJFabVAlFfXIuToPj/Ro3nuY/gjFUZJk3hQZF7MyS7nI0nD7FUvNIMhzbSX5JrzXCvqiCV0J+pRsp3EQyBqcM0xOYvvqRVJCpx1bQBbgC7m39dBJdUy8N1uEWkAr1tx7qUI51bR3LoxWqu6OeidlKvUgyc+ANbmI0wc4my+jbG0stEa0/bEneaqwJTZh4pIRk65ztBPRPt8SNpJL8SrKAMKXkJxaAofFBbeopEF+04n9j0YHd2hEtw/yrs5wR6aCOcVZNPVCD/cG3yRrg0NSxCrsRCW580oNRd/5gte61RgNLXuIfN0vGvqY/RlkOD0Xn1BLAwQUAAAACACsNHdcXg/1fmABAAAVBQAAGAAAAHhsL3dvcmtzaGVldHMvc2hlZXQxLnhtbF3UW0/CMBjG8Xs+RdN76VgV0XQjVcQDngVPd82oQGQdWRfQb28hRvu8d5RfWMY/T6r6X+WSrW3tF5XLeKedcGZdUU0XbpbxyXi41+PMN8ZNzbJyNuPf1vN+3lKbqv70c2sbFh7gfMbnTbM6FsIXc1sa365W1gX5qOrSNOFYz4Rf1dZMdz8qlyJNkq4ozcLxvMWY2n09MI3ZnsK5rjasDi/Ec1VsP+gOZ03GfTiv80SJda5E8WsnsXXQTmNL0QaxSbSz2PbRhrEdoJ3H1kW7iO0Q7TK2HtpVbEdoI/jvJMw1IClzA0jS3AKSNneAJM49IKnzAEjyPAKSPk+AJNAYkBSawAJIoWdAUugFkBR6BSSF3gBJoXdAUkjD0FOSSMPUU9JI49hJJA1zT0klDYOXJJOGyUvSScPoJQmlYfaSlNIwfElSaZi+pK1g/JK2gvXL/1Yi3C27O0dEl44Sfzda/gNQSwMEFAAAAAgArDR3XKwnw+AuAQAAVAIAAA0AAAB4bC9zdHlsZXMueG1spZLBTsMwDIbve4ood5ZtEgihNDsgTeK8IXHNWreNlDhV4k0rT4/TbjBOHDj5d+L/c+xWby/BizOk7CJWcr1cSQFYx8ZhV8n3w+7hWYpMFhvrI0IlR8hyaxY60+hh3wOQYALmSvZEw4tSue4h2LyMAyDftDEFS5ymTuUhgW1yMQWvNqvVkwrWoTQLIXQbkbKZgtH5U5yt5/espTIabYA5f7XeHZMrh2quVLNvIjjvC4GD0YMlgoQ7TsRVH8aBB0AeY/ZPdX9Ud8mO683jnUHNbUrDY0wNb85chdEeWuLK5Lq+RIqDKpdEMbBonO0iWl9YN4e6MQqvBu/3Za8fbRZ1PCHxBqTRl1bgKewCvTWV5A9URr5JfsxVzqQ5KS3uad/4f5PFpf3dYqJr9fM/mC9QSwECFAMUAAAACACsNHdcPtcnRRsBAABDAwAAEwAAAAAAAAAAAAAAgAEAAAAAW0NvbnRlbnRfVHlwZXNdLnhtbFBLAQIUAxQAAAAIAKw0d1xdh/QutAAAACwBAAALAAAAAAAAAAAAAACAAUwBAABfcmVscy8ucmVsc1BLAQIUAxQAAAAIAKw0d1wp+m4CxwAAADUBAAAPAAAAAAAAAAAAAACAASkCAAB4bC93b3JrYm9vay54bWxQSwECFAMUAAAACACsNHdcIhRQ4tsAAAA/AgAAGgAAAAAAAAAAAAAAgAEdAwAAeGwvX3JlbHMvd29ya2Jvb2sueG1sLnJlbHNQSwECFAMUAAAACACsNHdcSLvDQnUBAAClBAAAFAAAAAAAAAAAAAAAgAEwBAAAeGwvc2hhcmVkU3RyaW5ncy54bWxQSwECFAMUAAAACACsNHdcXg/1fmABAAAVBQAAGAAAAAAAAAAAAAAAgAHXBQAAeGwvd29ya3NoZWV0cy9zaGVldDEueG1sUEsBAhQDFAAAAAgArDR3XKwnw+AuAQAAVAIAAA0AAAAAAAAAAAAAAIABbQcAAHhsL3N0eWxlcy54bWxQSwUGAAAAAAcABwDCAQAAxggAAAAA';
+    // Convert base64 to binary
+    var binary=atob(xlsxB64);
+    var bytes=new Uint8Array(binary.length);
+    for(var i=0;i<binary.length;i++){bytes[i]=binary.charCodeAt(i);}
+    var resp=await fetch(GRAPH+'/me/drive/root:/'+EXCEL_FILE+':/content',{
+      method:'PUT',
+      headers:{
+        'Authorization':'Bearer '+msToken.access,
+        'Content-Type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      },
+      body:bytes.buffer
+    });
+    var data=await resp.json();
+    if(data&&data.id){
+      excelFileId=data.id;
+      msSaveToken();
+      showToast('Excel file created with headers ✓','ok');
+      return true;
+    }else{
+      showToast('Could not create Excel file: '+(data.error&&data.error.message||JSON.stringify(data)),'err');
+    }
+  }catch(err){showToast('Excel create error: '+err.message,'err');}
+  return false;
+}
+
+// ── Write all enquiries to Excel ──────────────────────────────────
+var HEADERS=['ID','Date','Name','Email','Phone','Company','Territory','Country',
+  'Department','WorkType','Assigned','Status','Type','Currency','Hours','Days',
+  'VendorName','VendorINR','VendorTimeline','Quote','Negotiated','Approved',
+  'QuoteRef','Timeline','Delivery','RetainerPct','RetainerAmt','RetainerStatus',
+  'ApprovalMail','InvoiceNo','InvoiceStatus','PayLink','Notes','Source',
+  'ZohoStatus','ZohoBalance','ZohoDueDate','ZohoInvId'];
+
+function enqToRow(e){
+  return[e.id,e.date,e.name,e.email,e.phone||'',e.company||'',e.territory||'',
+    e.country||'',e.department||'',e.workType||'',e.assigned||'',e.status||'',
+    e.type||'',e.currency||'USD',e.hours||'',e.days||'',e.vendorName||'',
+    e.vendorINR||'',e.vendorTimeline||'',e.quote||'',e.negotiated||'',
+    e.approved||'',e.quoteRef||'',e.timeline||'',e.delivery||'',
+    e.retainerPct||'',e.retainerAmt||'',e.retainerStatus||'',e.approvalMail||'',
+    e.invoiceNo||'',e.invoiceStatus||'',e.payLink||'',e.notes||'',e.source||'',
+    e.zohoStatus||'',e.zohoBalance||'',e.zohoDueDate||'',e.zohoInvId||''];
+}
+
+function rowToEnq(row,id){
+  return{id:Number(row[0])||id,date:row[1]||'',name:row[2]||'',email:row[3]||'',
+    phone:row[4]||'',company:row[5]||'',territory:row[6]||'',country:row[7]||'',
+    department:row[8]||'',workType:row[9]||'',assigned:row[10]||'',status:row[11]||'New Lead',
+    type:row[12]||'',currency:row[13]||'USD',hours:row[14]||'',days:row[15]||'',
+    vendorName:row[16]||'',vendorINR:row[17]||'',vendorTimeline:row[18]||'',
+    quote:row[19]||'',negotiated:row[20]||'',approved:row[21]||'',quoteRef:row[22]||'',
+    timeline:row[23]||'',delivery:row[24]||'',retainerPct:row[25]||'',
+    retainerAmt:row[26]||'',retainerStatus:row[27]||'',approvalMail:row[28]||'No',
+    invoiceNo:row[29]||'',invoiceStatus:row[30]||'',payLink:row[31]||'',
+    notes:row[32]||'',source:row[33]||'Website Enquiry',zohoStatus:row[34]||'',
+    zohoBalance:row[35]||'',zohoDueDate:row[36]||'',zohoInvId:row[37]||'',
+    vendorInvoices:[]};
+}
+
+async function xlWrite(enquiry){
+  if(!msIsConnected()||!excelFileId)return;
+  if(xlSyncing)return;
+  xlSyncing=true;
+  try{
+    var lastCol=String.fromCharCode(64+Math.min(HEADERS.length,26));
+    if(HEADERS.length>26){lastCol='A'+String.fromCharCode(64+(HEADERS.length-26));}
+    // Get used range to find row
+    var rows=await msGraphCall('GET',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/usedRange');
+    var vals=(rows&&rows.values)||[HEADERS];
+    var rowNum=-1;
+    for(var i=1;i<vals.length;i++){
+      if(String(vals[i][0])===String(enquiry.id)){rowNum=i+1;break;}
+    }
+    var newRow=enqToRow(enquiry);
+    var targetRow=rowNum>0?rowNum:vals.length+1;
+    var addr='A'+targetRow+':'+lastCol+targetRow;
+    await msGraphCall('PATCH',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/range(address=%27'+addr+'%27)',
+      {values:[newRow]});
+    console.log('Excel synced: '+enquiry.name+' row '+targetRow);
+  }catch(err){console.error('Excel write error:',err.message);}
+  xlSyncing=false;
+}
+
+async function xlInitSheet(){
+  // Create Enquiries worksheet with headers
+  try{
+    await msGraphCall('POST',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/add',
+      {name:'Enquiries'});
+  }catch(e){}
+  await msGraphCall('PATCH',
+    '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/range(address=%27A1%3AAL1%27)',
+    {values:[HEADERS]});
+}
+
+async function xlReadAll(){
+  if(!msIsConnected()||!excelFileId)return null;
+  try{
+    var rows=await msGraphCall('GET',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/usedRange');
+    if(!rows||!rows.values||rows.values.length<2)return[];
+    var data=[];
+    for(var i=1;i<rows.values.length;i++){
+      var row=rows.values[i];
+      if(row[2])data.push(rowToEnq(row,i));
+    }
+    return data;
+  }catch(e){return null;}
+}
+
+async function xlDeleteRow(id){
+  if(!msIsConnected()||!excelFileId)return;
+  try{
+    var rows=await msGraphCall('GET',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/usedRange');
+    if(!rows||!rows.values)return;
+    var vals=rows.values;
+    for(var i=1;i<vals.length;i++){
+      if(Number(vals[i][0])===id){
+        var rowNum=i+1;
+        // Clear the row
+        await msGraphCall('PATCH',
+          '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/range(address=%27A'+rowNum+'%3AAL'+rowNum+'%27)',
+          {values:[new Array(38).fill('')]});
+        break;
+      }
+    }
+  }catch(err){console.error('Excel delete error:',err.message);}
+}
+
+async function xlExportAll(){
+  if(!msIsConnected()){showToast('Connect Microsoft first','err');return;}
+  if(!excelFileId){
+    var ok=await msEnsureFile();
+    if(!ok){showToast('Could not find or create Excel file','err');return;}
+  }
+  showToast('Exporting '+DB.enquiries.length+' rows to Excel...','ok');
+  try{
+    // First ensure sheet and headers exist
+    await xlEnsureSheet();
+    // Write all rows in one batch call for speed
+    if(DB.enquiries.length===0){showToast('No data to export','err');return;}
+    var allRows=[HEADERS];
+    DB.enquiries.forEach(function(e){allRows.push(enqToRow(e));});
+    var lastRow=allRows.length;
+    var lastCol=String.fromCharCode(64+Math.min(HEADERS.length,26));
+    if(HEADERS.length>26){lastCol='A'+String.fromCharCode(64+(HEADERS.length-26));}
+    var addr='A1:'+lastCol+lastRow;
+    var result=await msGraphCall('PATCH',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/range(address=%27'+addr+'%27)',
+      {values:allRows});
+    if(result&&result.error){
+      showToast('Export error: '+result.error.message,'err');
+    }else{
+      showToast('Exported '+DB.enquiries.length+' rows to Excel ✓','ok');
+    }
+  }catch(err){showToast('Export failed: '+err.message,'err');}
+}
+
+async function xlEnsureSheet(){
+  // Get list of sheets and check Enquiries exists
+  try{
+    var wb=await msGraphCall('GET','/me/drive/items/'+excelFileId+'/workbook/worksheets');
+    if(wb&&wb.value){
+      var found=wb.value.find(function(s){return s.name==='Enquiries';});
+      if(!found){
+        await msGraphCall('POST','/me/drive/items/'+excelFileId+'/workbook/worksheets/add',{name:'Enquiries'});
+      }
+    }
+  }catch(e){}
+  // Write headers to row 1
+  try{
+    var lastCol=String.fromCharCode(64+Math.min(HEADERS.length,26));
+    if(HEADERS.length>26){lastCol='A'+String.fromCharCode(64+(HEADERS.length-26));}
+    await msGraphCall('PATCH',
+      '/me/drive/items/'+excelFileId+'/workbook/worksheets/Enquiries/range(address=%27A1%3A'+lastCol+'1%27)',
+      {values:[HEADERS]});
+  }catch(e){console.error('Header write error:',e);}
+}
+
+async function xlSyncFromExcel(){
+  if(!msIsConnected()||!excelFileId)return;
+  showToast('Syncing from Excel...','ok');
+  var data=await xlReadAll();
+  if(data&&data.length>0){
+    DB.enquiries=data;
+    DB.nextId=Math.max.apply(null,data.map(function(e){return e.id||0;}))+1;
+    saveDB();renderAll();renderDash();
+    showToast('Loaded '+data.length+' rows from Excel ✓','ok');
+  }else{
+    showToast('No data in Excel yet','warn');
+  }
+}
+
+function msBadge(){
+  var conn=msIsConnected();
+  var el=document.getElementById('ms-badge');
+  if(!el)return;
+  el.className=conn?'zhconn':'zhdisc';
+  el.innerHTML=conn?'✓ Excel Connected':'⚡ Connect Excel';
+  el.onclick=conn?null:msLogin;
+}
+
+function msSaveAndConnect(){
+  var cid = (document.getElementById('ms-cid')||{}).value.trim();
+  var tid = (document.getElementById('ms-tid')||{}).value.trim();
+  if(!cid||!tid){showToast('Enter both Client ID and Tenant ID','err');return;}
+  msSaveCreds(cid,tid);
+  showToast('Credentials saved ✓ — connecting...','ok');
+  msLogin();
+}
+
+function msDisconnect(){
+  msToken={access:'',refresh:'',expiry:0};
+  excelFileId='';
+  localStorage.removeItem('ms_token');
+  localStorage.removeItem('ms_file_id');
+  // Keep credentials saved - user just needs to click Connect again
+  MS_CLIENT_ID='';MS_TENANT_ID='';
+  msBadge();
+  showToast('Microsoft disconnected','err');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  loadDB();msLoadCreds();msLoadToken();loadZH();initWH();popSels();renderDash();renderAll();renderSettings();
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  updateBadges();msBadge();
+  // Handle Microsoft OAuth callback
+  if(window.location.search.indexOf('code=')>=0){
+    msHandleCallback();
+  }
+  // Warn if data not persisting
+  checkStorageHealth();
+}
+
+function checkStorageHealth(){
+  try{
+    localStorage.setItem('edpmo5_test','1');
+    var t=localStorage.getItem('edpmo5_test');
+    localStorage.removeItem('edpmo5_test');
+    if(t!=='1')throw new Error('read-back failed');
+    // Check data count matches what we loaded
+    var saved=localStorage.getItem('edpmo5');
+    if(saved){
+      var parsed=JSON.parse(saved);
+      if(parsed.enquiries&&parsed.enquiries.length!==DB.enquiries.length){
+        console.warn('DB mismatch - reloading from storage');
+        DB=parsed;
+        renderAll();renderDash();
+      }
+    }
+  }catch(e){
+    showToast('Storage warning: data may not persist. Connect Excel for permanent storage.','err');
+  }
+}
+init();
+</script>
+</body>
+</html>
